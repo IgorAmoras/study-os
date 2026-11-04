@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#090e1b" />
+  <meta name="description" content="Study OS — laboratório espacial pessoal de pesquisa." />
+  <title>Study OS · Cosmic Laboratory</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <div id="app" class="app">
+    <aside class="sidebar">
+      <button class="brand" data-view="home" aria-label="Study OS · Home">
+        <span class="brand-mark">✺</span><span><strong>STUDY<span class="brand-os">OS</span></strong><small>YOUR KNOWLEDGE, IN ORBIT</small></span>
+      </button>
+      <div class="sidebar-label">ESPAÇO DE TRABALHO</div>
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span> Central <span class="nav-key">01</span></button>
+        <button class="nav-item" data-view="universe"><span class="nav-icon">✧</span> Universo <span class="nav-key">02</span></button>
+        <button class="nav-item" data-view="workspace"><span class="nav-icon">▦</span> Bancada <span class="nav-key">03</span></button>
+        <button class="nav-item" data-view="notebook"><span class="nav-icon">〰</span> Super Caderno <span class="nav-key">04</span></button>
+      </nav>
+      <div class="sidebar-rule"></div>
+      <div class="sidebar-label project-label">PROJETOS <span class="small-count">01</span></div>
+      <button class="project-nav" id="project-nav"><span class="project-symbol">◈</span><span>Data-driven Dynamics<small>Pesquisa · Engenharia de Controle</small></span><span class="project-chevron">›</span></button>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-bottom"><span class="health-dot" id="health-dot"></span><span id="connection-label">Conectando...</span><span class="version">v0.1</span></div>
+    </aside>
+    <div class="app-main">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>STUDY OS</span><span class="breadcrumb-sep">/</span><strong id="breadcrumb-current">Central de Projetos</strong></div>
+        <div class="topbar-actions"><span class="topbar-project">◈&nbsp; DATA-DRIVEN CONTROL</span><span class="topbar-divider"></span><button id="mode-control" class="mode-control" title="Alternar modo de trabalho">✧ EXPLORAR <span>⌄</span></button><span class="topbar-avatar">S</span></div>
+      </header>
+
+      <main id="view-home" class="view visible home-view">
+        <div class="home-head"><span class="overline">QUARTA-FEIRA · LABORATÓRIO PESSOAL</span><div class="home-title-row"><div><h1>Seu universo de <em>ideias.</em></h1><p>Um lugar para pensar, conectar e continuar de onde você parou.</p></div><div class="home-head-actions"><span class="tiny-pulse"></span> AMBIENTE LOCAL</div></div></div>
+        <section class="hero">
+          <canvas id="hero-canvas" aria-hidden="true"></canvas><div class="hero-vignette"></div>
+          <div class="hero-copy"><span class="eyebrow"><span class="tiny-square"></span> SEU LABORATÓRIO ESTÁ PRONTO</span><h2>Explore o que você<br/>está <i>construindo.</i></h2><p>Ideias não vivem em listas. Elas formam constelações.<br/>Encontre as conexões e transforme pesquisa em descoberta.</p><div class="hero-buttons"><button class="btn btn-primary" id="hero-explore">✧ &nbsp; Entrar no universo <span>↗</span></button><button class="btn btn-ghost" id="hero-resume">↻ &nbsp; Retomar bancada</button></div></div>
+          <div class="hero-index"><span>01 / 01</span><span class="thin-line"></span><span>UNIVERSO ATIVO</span></div>
+        </section>
+        <div class="section-head"><div><span class="overline">CONTINUIDADE</span><h3>Seu ponto de partida</h3></div><span class="section-meta">SEM PRESSA. SEM PERDER O CONTEXTO.</span></div>
+        <div class="home-grid"><section class="surface focus-surface"><div class="card-label"><span><span class="gold-dot"></span> FOCO DO DIA</span><span class="subtle-icon">◎</span></div><h4 id="focus-title">Estudar identificação com estados ocultos</h4><p id="focus-note">Revisitar a hipótese e os experimentos existentes.</p><div class="stage-bar"><span class="stage-dot"></span><span id="focus-stage">EXPLORAR</span><span class="stage-line"></span><span>JORNADA CIENTÍFICA</span></div><div class="card-bottom"><button class="link-button" id="open-focus">Abrir contexto <span>↗</span></button><button class="plain-button" id="change-focus">Trocar foco</button></div></section>
+        <section class="surface resume-surface"><div class="card-label"><span>↺ &nbsp; ÚLTIMO CHECKPOINT</span><span class="subtle-icon">◷</span></div><h4>Continue de onde parou</h4><p id="checkpoint-description">Sua bancada e as referências permanecem no lugar.</p><div class="resume-preview"><div class="mini-window"><span class="mini-dots">● ● ●</span><span class="mini-code">def identify_system():</span><span class="mini-code muted">&nbsp;&nbsp;# research in progress</span></div><div class="mini-window mini-notes"><span>∿</span><span>⋯</span><span>∼</span></div></div><div class="card-bottom"><button class="link-button" id="resume-card">Restaurar bancada <span>↗</span></button><span class="small-muted" id="checkpoint-time">SALVAMENTO AUTOMÁTICO</span></div></section></div>
+        <div class="section-head"><div><span class="overline">PESQUISA EM ANDAMENTO</span><h3>Seus projetos</h3></div><button class="link-button small" id="projects-show">VER UNIVERSO ↗</button></div>
+        <section class="surface project-surface"><div class="project-art"><div class="project-orbit one"></div><div class="project-orbit two"></div><div class="project-core">◈</div></div><div class="project-info"><span class="overline">ENGENHARIA DE CONTROLE · REPOSITÓRIO GIT</span><h4>Data-driven Dynamics & Control</h4><p>Identificação, sistemas dinâmicos, Koopman, SINDy e port-Hamiltonian.</p><div class="project-tags"><span>KOOPMAN</span><span>SINDy</span><span>DUFFING</span></div></div><div class="project-end"><span id="repo-status" class="repo-label">GITHUB · FONTE CANÔNICA</span><button class="round-arrow" id="project-open" title="Explorar projeto">↗</button></div></section>
+        <footer class="footer">STUDY OS <span>·</span> COSMIC LABORATORY <span>·</span> BUILT FOR CURIOSITY, NOT BUSYWORK</footer>
+      </main>
+
+      <main id="view-universe" class="view universe-view">
+        <div class="universe-toolbar"><div><span class="overline">VISUALIZAÇÃO ESPACIAL · 01</span><h1>Mapa do conhecimento</h1><p>Arraste para orbitar · scroll para aproximar · clique para explorar · duplo clique para abrir</p></div><div class="universe-actions"><button class="icon-button" id="reset-camera" title="Restaurar câmera">↺</button><button class="btn btn-outline" id="universe-to-workspace">▦ &nbsp; Abrir bancada</button></div></div>
+        <div class="universe-stage"><canvas id="universe-canvas" aria-label="Universo científico navegável em perspectiva 3D"></canvas><div class="cosmos-chrome top-left"><span class="chrom-dot"></span> SPATIAL ENGINE / ONLINE <span class="scanline"></span></div><div class="cosmos-chrome bottom-left">ORBIT / DRAG &nbsp;·&nbsp; ZOOM / SCROLL &nbsp;·&nbsp; OPEN / DOUBLE CLICK</div><div class="cosmos-chrome bottom-right" id="cosmos-coords">X 0.00 · Y 0.00 · Z 0.00</div><div class="universe-detail"><span class="overline" id="node-overline">REGIÃO CIENTÍFICA</span><div class="detail-emblem" id="detail-emblem">◇</div><h2 id="node-title">Duffing Oscillator</h2><p id="node-description">Um sistema dinâmico não linear no centro dos seus estudos de identificação.</p><div class="detail-rule"></div><div class="detail-metadata"><span>DOMÍNIO</span><strong id="node-domain">CONTROLE</strong></div><div class="detail-metadata"><span>RELAÇÕES</span><strong id="node-links">03 CONEXÕES</strong></div><button class="btn btn-primary detail-button" id="node-open">Projetar na bancada ↗</button></div></div>
+      </main>
+
+      <main id="view-workspace" class="view workspace-view"><div class="workspace-head"><div><span class="overline">LABORATÓRIO / BANCADA ATIVA</span><h1>Uma bancada para pensar.</h1><p>As janelas conservam posição e tamanho. Arraste pelos títulos; redimensione pelo canto.</p></div><div class="workspace-actions"><button class="btn btn-outline" id="add-code">+ Código</button><button class="btn btn-outline" id="add-notes">+ Notas</button><button class="btn btn-primary" id="add-notebook">〰 &nbsp; Abrir caderno</button></div></div><div id="workspace-surface" class="workspace-surface"><div class="workspace-grid"></div><div class="workspace-guide">SOLTE AS IDEIAS AQUI <span>✧</span></div><div id="panels"></div></div><div class="checkpoint-bar"><span>↺ &nbsp; CHECKPOINT</span><input id="checkpoint-input" placeholder="Onde parei? Próximo passo... (opcional)" maxlength="300"/><button id="checkpoint-save">Salvar</button><span id="checkpoint-saved">ESTADO RESTAURÁVEL</span></div></main>
+
+      <main id="view-notebook" class="view notebook-view"><div class="notebook-head"><div><span class="overline">SUPER CADERNO VIVO · CANVAS INFINITO</span><h1>Raciocínio sem margens.</h1><p>Caneta escreve. Dedo navega. O mesmo caderno no PC e no tablet.</p></div><div class="notebook-status"><span class="health-dot" id="ink-dot"></span><span id="ink-sync">Preparando sincronização</span></div></div><div class="ink-tools" role="toolbar" aria-label="Ferramentas do caderno"><button class="ink-tool active" data-tool="pen" title="Caneta">✎ <span>Caneta</span></button><button class="ink-tool" data-tool="pan" title="Mover">✥ <span>Mover</span></button><button class="ink-tool" data-tool="text" title="Inserir texto">T <span>Texto</span></button><div class="tool-separator"></div><button class="swatch active" data-color="#d9e9ff" style="--swatch:#d9e9ff" aria-label="Branco"></button><button class="swatch" data-color="#79d7ff" style="--swatch:#79d7ff" aria-label="Azul"></button><button class="swatch" data-color="#eacb83" style="--swatch:#eacb83" aria-label="Dourado"></button><button class="swatch" data-color="#ff91a9" style="--swatch:#ff91a9" aria-label="Rosa"></button><div class="tool-separator"></div><button class="ink-tool minor" id="ink-recenter" title="Centralizar">⊙ <span>Centralizar</span></button><button class="ink-tool minor" id="ink-zoomout" title="Diminuir zoom">−</button><span class="zoom-level" id="ink-zoom">100%</span><button class="ink-tool minor" id="ink-zoomin" title="Aumentar zoom">+</button></div><div id="notebook-area" class="notebook-area"><canvas id="ink-canvas" aria-label="Canvas infinito de escrita"></canvas><div class="ink-hint" id="ink-hint">S PEN · TRAÇO VETORIAL · LOCAL-FIRST</div><div class="ink-location" id="ink-location">0 · 0</div></div></main>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="focus-dialog" class="modal-layer hidden"><div class="modal"><span class="overline">PRIORIDADE INTENCIONAL</span><h2>Escolher foco do dia</h2><p>Um objetivo principal. O restante continua acessível.</p><div id="focus-choices"></div><button class="btn btn-ghost modal-cancel" id="focus-cancel">Cancelar</button></div></div>
+  <div id="pair-dialog" class="modal-layer hidden"><div class="modal"><span class="overline">REDE LOCAL</span><h2>Vincular dispositivo</h2><p>Insira o token exibido no terminal do Study OS no PC. A conexão precisa estar na mesma rede.</p><input id="pair-token" placeholder="Token de acesso" autocomplete="off"/><button class="btn btn-primary" id="pair-apply">Conectar</button></div></div>
+</body>
+</html>

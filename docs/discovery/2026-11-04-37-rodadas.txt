@@ -1,0 +1,1110 @@
+# STUDY OS — REGISTRO MESTRE DE DISCOVERY
+## 37 rodadas, decisões de produto, requisitos, limites e plano de execução
+
+**Versão:** 1.0 — consolidação em 04/11/2026  
+**Situação:** discovery conceitual encerrado após a rodada 37; implementação ainda por iniciar nesta etapa.  
+**Escopo:** produto pessoal Study OS; inicialmente um usuário, computador Windows como estação principal e Galaxy Tab S6 FE como superfície de escrita.  
+**Objetivo deste arquivo:** preservar decisões para que uma implementação futura não rediscuta requisitos ou transforme recomendações do assistente em escolhas do usuário.
+
+---
+
+# 0. COMO LER ESTE DOCUMENTO: FIDELIDADE E PROVENIÊNCIA
+
+Este é um **registro consolidado e detalhado de decisões**, NÃO uma transcrição literal palavra por palavra de todas as mensagens. As rodadas 25–37 e muitas das anteriores tiveram alternativas e respostas confirmadas; para parte das rodadas mais antigas, o histórico recuperável preserva a decisão e o contexto, mas não o enunciado literal nem o vínculo inequívoco com cada número de rodada.
+
+Convenções:
+- **[CONFIRMADO]** = escolha expressa pelo usuário ou regra explicitamente imposta por ele.
+- **[CONFIRMADO COM RESSALVA]** = escolha em que o usuário corrigiu ordem, combinou alternativas ou restringiu o alcance.
+- **[PROPOSTO]** = desenho, tecnologia, critério de aceite ou comportamento recomendado pelo assistente, ainda sujeito a validação na implementação.
+- **[FUTURO]** = desejo de produto existente, mas deliberadamente fora da primeira release.
+- **[LACUNA HISTÓRICA]** = não há evidência suficiente para afirmar um código de alternativa ou numeração exata. Não inventar retrospectivamente.
+
+**Nota especial sobre rodadas 9–17:** o conteúdo recuperável traz um bloco detalhado de decisões temáticas de IA (IA.1–IA.10), de MVP (MVP.1–MVP.3) e outras instruções. O vínculo exato dessas perguntas a cada rodada de 9 a 17 não está preservado com segurança. Elas estão todas documentadas na seção correspondente, SEM atribuição numérica fictícia. A lacuna diz respeito à indexação histórica, não à decisão temática recuperada.
+
+**Nota especial sobre armazenamento:** em 30.1 foi escolhida a visão híbrida C para o produto, mas o usuário corrigiu imediatamente o escopo da PRIMEIRA release: nada de outbox SQLite, nada de infraestrutura corporativa, e SQLite sequer é obrigatório no MVP. Uma implementação mínima com arquivos/JSON é aceitável. Esta correção prevalece.
+
+**Nota sobre os exemplos:** Duffing, Koopman, SINDy, identificação de estados ocultos e processos gaussianos são cenários científicos reais de interesse do projeto; quaisquer valores numéricos de gráficos de demonstração usados durante o discovery eram ilustrativos, não resultados executados.
+
+---
+
+# 1. VISÃO DO PRODUTO E DECLARAÇÃO DE INTENÇÃO
+
+Study OS é um **ambiente pessoal de aprendizagem e pesquisa espacial**, que combina:
+
+1. Um **universo tridimensional navegável**, com regiões estáveis, conceitos, vínculos e objetos holográficos abstratos; a organização espacial não é mero enfeite.
+2. Uma **Home / Central de Projetos** clara, modular, prioritariamente funcional, com foco do dia, atividades recentes e acesso à pesquisa.
+3. Uma **bancada científica espacial** que reúne, lado a lado, navegador, artigos, PDFs, notas, fragmentos, código, Jupyter, gráficos, tarefas e histórico de experimentos.
+4. Um **Super Caderno Vivo** em canvas infinito e multimodal, compartilhado em tempo real entre o PC e o Galaxy Tab S6 FE, com manuscrito vetorial da S Pen, texto editável, matemática, imagens, PDF e trechos de código.
+5. Projetos e arquivos científicos que **continuam existindo em seus repositórios Git**, sem serem sequestrados por um formato proprietário.
+6. Ferramentas de continuidade: **jornadas científicas, tarefas-portal, checkpoints, retomada contextual e modos Explorar/Estudar/Foco**.
+7. Um produto **local-first, pessoal, fácil de manter, responsivo e visualmente cinematográfico**, sem IA na primeira release.
+
+Problemas que o produto precisa resolver:
+- Papers longos espalhados e fragmentos difíceis de reencontrar.
+- Anotações manuscritas separadas do código e das referências.
+- Falta de um lugar útil para próximos passos e acompanhamento científico.
+- Reconstrução custosa do raciocínio ao retomar estudos interrompidos.
+- Troca repetitiva de aplicativos e perda de contexto.
+- Dificuldade de visualizar pré-requisitos, conceitos, métodos e resultados experimentais como um conjunto coerente.
+- Necessidade de estudar mesmo em sessões curtas ou com energia limitada.
+
+O conceito não é «Notion em 3D», «uma pasta bonita», nem um mundo virtual desconectado do trabalho. A metáfora espacial deve tornar o conhecimento navegável, e a bancada deve ser realmente utilizável.
+
+---
+
+# 2. RODADAS 1–8 — FUNDAÇÃO DO UNIVERSO E DO CADERNO
+
+## RODADA 01 — Ontologia e navegação do universo
+
+**1.1 — Escolha B com a estética de A [CONFIRMADO COM RESSALVA].**
+- O universo deve possuir uma organização inteligível/estruturada.
+- Na camada estética, absorver o aspecto abstrato, cósmico e espacial de uma proposta mais livre.
+- Evitar um plano de pastas convencional disfarçado de estrelas sem semântica.
+
+**1.2 — C, híbrida com inclinação a B [CONFIRMADO COM RESSALVA].**
+- O espaço do conhecimento deve ser persistente e ter identidade própria: a região de um conceito não muda arbitrariamente a cada acesso.
+- Ao mesmo tempo, permitir recortes, perspectivas e vistas de trabalho contextuais e pessoais.
+- Diferença central: a existência de uma entidade não depende da câmera ou da bancada em que está sendo vista.
+
+**1.3 — C, voo livre + viagem inteligente + zoom semântico [CONFIRMADO].**
+- Navegação espacial livre.
+- Rotas/teletransporte/foco em destinos e ligações relevantes.
+- Aproximação muda gradualmente o nível de detalhes visíveis.
+- O usuário não deve ficar preso em deslocamentos longos pelo cosmos só para abrir um PDF.
+
+**1.4 — C, universos aninhados [CONFIRMADO].**
+- Conceitos podem ter subuniversos, regiões internas e organização em múltiplas escalas.
+- Favorecer organização multiescala com continuidade cognitiva.
+- Exemplo: Controle → Identificação → Koopman → experimento de Duffing → execução e gráficos.
+
+**1.5 — C, estrutura inicial orientada [CONFIRMADO].**
+- Produto começa com organização útil, sem exigir uma taxonomia criada do zero.
+- A representação espacial deve coexistir com uma organização externa de arquivos/pastas compreensível.
+- Importação do repositório não deve destruir a estrutura física existente.
+
+**Consequência arquitetural [PROPOSTO]:** separar `entidade canônica`, `relações`, `projeção espacial`, `visão/câmera` e `layout de bancada`. O mesmo arquivo pode existir fisicamente no Git e visualmente em múltiplos ambientes sem cópia.
+
+## RODADA 02 — Coerência cognitiva, proximidade e composição
+
+**2.1 — Prioridade C > A > B [CONFIRMADO COM RESSALVA].**
+- Ordem declarada pelo usuário: **coerência cognitiva primeiro; coerência geométrica depois; coerência semântica em terceiro**.
+- O requisito fundamental é a experiência de continuidade e orientação: saber onde algo está, por que pertence àquela região e como voltar.
+- A referência a uma estrutura «convexa» apareceu como intuição de navegabilidade, não como obrigação formal de convexidade geométrica.
+
+**2.2 — Proximidade significa também composição de bancada [CONFIRMADO].**
+- «Estar perto» não é apenas distância entre entidades no universo.
+- O usuário imaginou navegador/ChatGPT/Claude à esquerda, Super Caderno no centro, código à direita e PDFs/referências por perto.
+- A bancada é uma **montagem funcional de instrumentos** relevantes para um pensamento em andamento.
+- Uma entidade pode ser projetada ali sem deslocar sua localização canônica.
+
+**2.3 — C, entidade única e múltiplos portais/projeções [CONFIRMADO].**
+- Abrir o mesmo paper em mais de uma bancada não deve gerar cópias independentes do paper.
+- Projeções podem ser movidas, fechadas e redimensionadas.
+- Proveniência e vínculo com a entidade original devem ser preservados.
+
+**2.4 — C, layout ancorado; sugestões, não reorganização silenciosa [CONFIRMADO].**
+- A disposição manual do usuário é soberana.
+- O sistema não pode reposicionar objetos sem consentimento porque isso quebra memória espacial.
+- Sugestões de arranjo podem existir posteriormente, mas não são pretexto para deslocamentos automáticos.
+
+**2.5 — C, posicionamento livre + encaixe + presets [CONFIRMADO].**
+- Mover e redimensionar livremente.
+- Snapping magnético, agrupamentos e composições salvas.
+- Precisão de layout quando necessária, fluidez espacial no restante do tempo.
+
+## RODADA 03 — Conhecimento, cadernos, entidades e relações
+
+**3.1 — B com elementos de C; blocos multimodais com promoção seletiva [CONFIRMADO COM RESSALVA].**
+- Cadernos misturam texto digitado, manuscrito, fórmulas, imagens, recortes, código e anexos.
+- Nem cada palavra nem cada traço precisam se tornar uma estrela ou entidade 3D.
+- Trechos relevantes podem ser **promovidos** a objetos espaciais próprios, com proveniência da anotação original.
+- Evitar fragmentar automaticamente o pensamento num excesso de nós.
+
+**3.2 — C com B; regiões, decks e arquivos são coisas distintas [CONFIRMADO COM RESSALVA].**
+- Região espacial representa organização conceitual.
+- Deck é agrupamento/corte de materiais para leitura, comparação ou trabalho.
+- Pasta física representa armazenamento no disco/repositório.
+- Não colapsar os três em um único modelo de «pastas».
+
+**3.3 — C, hierarquia espacial + vínculos transversais [CONFIRMADO].**
+- Conceitos aninhados convivem com relações que atravessam regiões.
+- Ex.: um teorema matemático pode fundamentar várias técnicas em subuniversos diferentes.
+
+**3.4 — B agora; extensível a C mais tarde [CONFIRMADO COM RESSALVA].**
+- No MVP, relações explícitas e tipadas criadas pelo usuário: «é pré-requisito de», «implementa», «explica», «contradiz», «é resultado de», «referencia» etc.
+- Inferência automática e recomendação semântica por IA são futuras.
+- Toda aresta deve conservar tipo e origem.
+
+**3.5 — C, zoom semântico e foco contextual [CONFIRMADO].**
+- O que é mostrado varia com o nível da câmera e com o foco.
+- No distante: estrutura geral; ao aproximar: nomes, metadados, conexões; ao abrir: ferramenta completa.
+- Reduzir ruído visual sem apagar a estrutura subjacente.
+
+## RODADA 04 — Instrumentos espaciais e fluxo de trabalho
+
+**4.1 — C, voo livre + controles de precisão tipo CAD [CONFIRMADO].**
+- Exploração do cosmos e ajuste preciso de objetos não devem competir.
+- Panning/órbita/zoom/foco/encaixe previsíveis.
+
+**4.2 — C, portais que se tornam interfaces funcionais [CONFIRMADO].**
+- Objetos holográficos podem abrir leitura de PDF, editor, navegador ou notebook.
+- Portais funcionais devem ser movíveis, redimensionáveis e legíveis.
+
+**4.3 — C, arranjo manual + magnetismo + layouts salvos [CONFIRMADO].**
+- Persistir posição e dimensão de ferramentas.
+- Bancadas reabríveis com a mesma composição.
+
+**4.4 — C, montagem livre e modelos reutilizáveis [CONFIRMADO].**
+- Permitir montar bancadas com qualquer combinação pertinente de materiais.
+- Salvar modelos de estudo, leitura de papers, programação ou comparação de resultados.
+
+**4.5 — C com complementos; restaurar estado e contexto científico [CONFIRMADO COM RESSALVA].**
+- Voltar ao ambiente com documentos, páginas, posição, scripts e notas como foram deixados.
+- Ligar essa continuidade à Home/whiteboard de tarefas e próximos passos.
+- Não fazer do retorno um processo manual de reconstrução.
+
+## RODADA 05 — Linguagem visual e identidade do universo
+
+**5.1 — C, gramática visual compartilhada [CONFIRMADO].**
+- Classes de objetos têm características próprias, mas pertencem ao mesmo design system.
+- Reconhecer papers, cadernos, experimentos, conceitos e código sem abrir cada elemento.
+
+**5.2 — A, objetos holográficos abstratos [CONFIRMADO; alternativa C rejeitada].**
+- Em estado espacial, os objetos não precisam ser janelas retangulares flutuando.
+- Usar formas abstratas 3D legíveis, com comportamento coerente.
+- Ao abrir, transformar-se numa interface realmente útil, mesmo que plana.
+
+**5.3 — C, cor + forma + ícone + rótulo [CONFIRMADO].**
+- Não codificar tipos apenas por cor.
+- A identidade visual deve ser redundante e acessível.
+
+**5.4 — C, estados de conhecimento híbridos [CONFIRMADO COM LIMITE].**
+- Usuário pode indicar estados como novo, em estudo, compreendido, validado, revisitar.
+- Sugestões automáticas do sistema dependentes de IA não entram na primeira release.
+
+**5.5 — B com toque de C; cosmos cinematográfico + foco sóbrio [CONFIRMADO COM RESSALVA].**
+- Visual impactante ao explorar.
+- Superfícies de leitura/código nítidas e tranquilas.
+- Preferir contraste e tipografia de trabalho a efeitos visuais contínuos enquanto escreve.
+
+## RODADA 06 — Papers, programação e jornada de pesquisa
+
+**6.1 — C, caixa de entrada e futura descoberta acadêmica [CONFIRMADO COM LIMITE].**
+- Importar referências e PDFs sem obrigar organização imediata.
+- Motor de descoberta acadêmica desejado: pesquisar fontes, identificar DOI/metadados, achar PDFs legalmente acessíveis, coletar referências.
+- Crawlers só em fontes autorizadas; não contornar paywalls, autenticações ou licenças.
+- Classificação automática por modelo é posterior ao MVP; importação manual e metadados básicos bastam no primeiro corte.
+
+**6.2 — A+B+C, extração progressiva [CONFIRMADO COM RESSALVA].**
+- Primeiro: ler, realçar e anotar PDFs.
+- Depois: selecionar texto/imagem/trecho e inseri-lo no caderno com link à fonte.
+- Evolução: objetos matemáticos editáveis e ligações diretas a experimentos.
+- OCR e reconhecimento avançado são opcionais, nunca pré-requisito para destacar uma figura.
+
+**6.3 — C, Jupyter + editor + código executável [CONFIRMADO].**
+- Ler e escrever scripts e notebooks.
+- Preservar integração com bibliotecas e ambientes Python existentes.
+- Execução acionada explicitamente pelo usuário.
+
+**6.4 — C com B, linhagem e diário científico [CONFIRMADO COM RESSALVA].**
+- Experimentos conectam hipótese, código, parâmetros, resultados, falhas e análise.
+- Registrar diferenças entre execuções e mudanças de método.
+- Não confundir um gráfico salvo de uma execução anterior com resultado de script recentemente modificado.
+
+**6.5 — B com C, roadmaps espaciais de pré-requisitos [CONFIRMADO COM RESSALVA].**
+- Etapas dependentes formando jornada navegável.
+- Home e quadros de projeto mostram planos e levam diretamente aos materiais relacionados.
+
+## RODADA 07 — Super Caderno Vivo e tablet
+
+**7.1 — Integração bidirecional em tempo real [CONFIRMADO; esclarecimento essencial].**
+- Não é simples upload, screenshot ou espelhamento de vídeo.
+- O tablet desenha traços editáveis; o PC recebe e pode manipular o mesmo documento.
+- Alterações nos dois dispositivos se propagam, preservando sua natureza de dados e evitando «imagens de tela» como fonte da verdade.
+
+**7.2 — C, manuscrito original + reconhecimento opcional [CONFIRMADO].**
+- Traços originais da S Pen precisam ser mantidos.
+- OCR/conversão LaTeX/modelo local podem ser acrescentados no futuro.
+- O núcleo da escrita não depende de GPT, API, inferência local ou reconhecimento obrigatório.
+
+**7.3 — C, tablet como extensão viva da bancada [CONFIRMADO].**
+- Caderno aparece no PC e no tablet.
+- É possível escrever no tablet enquanto papers, gráficos e código estão no PC.
+
+**7.4 — Tablet SOMENTE caderno/canvas; PC executa o restante [CONFIRMADO; correção de escopo].**
+- O Galaxy Tab S6 FE é uma superfície especializada de desenho e notas.
+- Não exigir motor 3D, Jupyter completo nem renderização pesada no tablet.
+- O PC também pode abrir e editar o caderno.
+
+**7.5 — Liberdade para sugerir captura contextual; Knowledge Gravity [PROPOSTO, não decisão técnica fechada].**
+- Ao capturar um PDF/figura no PC, oferecer inserção no caderno ativo ou uma bandeja temporária.
+- Guardar URL/caminho/página/trecho de origem.
+- Não monitorar indiscriminadamente o clipboard nem introduzir IA obrigatória.
+- Mais adiante as rodadas 26.1–26.3 formalizam as escolhas de inserção e sincronização.
+
+## RODADA 08 — Home/whiteboards, registro inicial
+
+**8.1 — A, whiteboard como entrada [CONFIRMADO HISTORICAMENTE].**
+- Ideia original da landing page: superfície de organização visual e próximos passos, não tela vazia.
+- **ATENÇÃO: evoluiu na rodada 34.1 para B, Central de Projetos.** A decisão posterior prevalece para a HOME. Whiteboards livres continuam disponíveis nos projetos.
+
+**8.2 — C, quadro global + quadros por projeto [CONFIRMADO HISTORICAMENTE].**
+- Existência de visão global e espaços específicos de projeto.
+- Compatibilizar com a separação posterior: Home global estruturada, whiteboards livres nos projetos.
+
+**8.3 — C, canvas livre com componentes vivos [CONFIRMADO HISTORICAMENTE].**
+- Tarefas, decks, portais, fragmentos e vínculos podem coexistir numa superfície visual.
+- Uma tarefa pode levar à bancada, não apenas abrir texto descritivo.
+- Na Home, este conceito é subordinado à escolha posterior de dashboard modular, não a uma tela inteiramente livre.
+
+---
+
+# 3. RODADAS 09–17 — REGISTRO TEMÁTICO RECUPERADO, SEM NUMERAÇÃO EXATA
+
+**[LACUNA HISTÓRICA DE ÍNDICE]** Os itens abaixo fazem parte do discovery ocorrido entre a primeira definição do universo e a rodada 18; a numeração individual das rodadas 9–17 não pôde ser reconstruída de maneira confiável. Preservamos os identificadores temáticos efetivamente conhecidos.
+
+## 3.1. Visão futura de IA (explicitamente FORA da primeira release)
+
+**IA.1 — C, inteligência contextual opcional [CONFIRMADO / FUTURO].**
+- Quando existir, deve ajudar a encontrar relações, recuperar contexto e propor próximos passos.
+- Não pode ser requisito para criar um caderno, abrir PDF, executar código, buscar um arquivo ou navegar no universo.
+
+**IA.2 — C, autonomia progressiva [CONFIRMADO / FUTURO].**
+- Ferramentas automáticas podem evoluir de sugestões para fluxos supervisionados.
+- Não conceder autonomia ampla ou ações não solicitadas no MVP.
+
+**IA.3 — C, proveniência explícita [CONFIRMADO].**
+- Diferenciar dado criado pelo usuário, importado de arquivo/fonte e gerado por modelo quando modelos entrarem no sistema.
+- Ter rastro verificável de origem é importante mesmo sem IA.
+
+**IA.4 — B, tutor nativo + integrações externas [CONFIRMADO / FUTURO].**
+- Possibilidade de aprendizagem guiada pelo próprio Study OS ou por serviços usados pelo usuário em outras janelas.
+- No MVP, navegadores externos e painéis web não são «agentes de IA do Study OS»; são apenas ferramentas web.
+
+**IA.5 — B, local-first e escalonamento externo quando valer a pena [CONFIRMADO / FUTURO].**
+- Futuramente preferir execução local para tarefas simples, recorrendo a serviços externos quando o benefício justificar.
+- Privacidade, custo e disponibilidade devem ser considerados.
+
+**IA.6 — C, benchmark científico próprio [CONFIRMADO / FUTURO].**
+- Avaliar qualidade dos modelos com tarefas reais de estudo/pesquisa, não apenas benchmarks públicos genéricos.
+
+**IA.7 — A, zero gastos automáticos com APIs [CONFIRMADO].**
+- Nenhuma chamada paga sem autorização explícita.
+- A primeira release deve funcionar sem chaves de API e sem custo variável de inferência.
+
+**IA.8 — B, modelos especializados carregados sob demanda [CONFIRMADO / FUTURO].**
+- Evitar grandes modelos locais sempre residentes apenas para classificação ou tarefas leves.
+- Usar especialização e economia de recursos quando IA entrar.
+
+**IA.9 — C, meta-agente para selecionar modelos/ferramentas [CONFIRMADO / FUTURO].**
+- Não apenas roteador fixo entre modelos; coordenação inteligente de ferramentas e estratégias no futuro.
+- **Não implementar no MVP.**
+
+**IA.10 — C, conjunto completo de benchmarks [CONFIRMADO / FUTURO].**
+- Registrar tarefas de avaliação, casos difíceis, qualidade e regressões quando o componente IA existir.
+
+### Decisão temporal acima de todas as anteriores
+
+**Usuário: “IA é secundária ao MVP; primeiro precisamos que o produto funcione.” [CONFIRMADO; PRIORIDADE MÁXIMA].**
+- **ZERO IA na primeira release.**
+- Funcionalidades básicas não podem chamar modelos locais, remotos ou APIs.
+- Concentração do primeiro lançamento: universo espacial funcional, bancada, PDF, Super Caderno, fluxo PC↔tablet e recuperação de estado. Gráficos e código devem ser incorporados conforme avanço do produto sem depender de IA.
+- IA permanece no roadmap, nunca no caminho crítico do MVP.
+
+## 3.2. Decisões de MVP e implementação
+
+**MVP.1 — A+B+C, “all-in” conceitual [CONFIRMADO COM RESSALVA].**
+- O usuário rejeitou uma demo vazia que só prova uma cena 3D ou um protótipo de cliques sem trabalho real.
+- Quer demonstrar um fluxo integrado de ponta a ponta.
+- **Interpretação correta:** construir fatias verticais reais e integradas, sem tentar completar todas as features futuras de uma só vez.
+
+**MVP.2 — Tecnologia delegada ao critério de manutenção [CONFIRMADO].**
+- O usuário não impôs stack específica: escolher a mais eficiente, simples, responsiva e fácil de manter.
+- Proposta do assistente: React + TypeScript + Vite; Three.js/React Three Fiber para 3D; biblioteca de canvas e desenho baseada em componentes existentes; PDF.js; WebSocket; pequeno servidor local Node.js; filesystem/JSON inicialmente; Jupyter/Python já instalado.
+- Estes nomes de bibliotecas são **[PROPOSTOS]**, não contratos obrigatórios nem motivo para adicionar infraestrutura pesada.
+
+**MVP.3 — GitHub pode ser usado [CONFIRMADO].**
+- Código e projetos podem estar em repositórios GitHub.
+- Git não é protocolo de sincronização de traços nem local para milhares de commits por sessão manuscrita.
+- A escolha detalhada de Git como origem dos projetos aparece em 30.3 B.
+
+## 3.3. Restrições de interface e fontes de dados recuperadas desse período
+
+- PC gamer é estação primária de desenvolvimento, pesquisa e navegação espacial.
+- Galaxy Tab S6 FE (hardware mais antigo) é superfície de escrita do Super Caderno; a sensação de tinta tem prioridade.
+- Produto começa **no navegador** em PC, não exige app desktop instalado.
+- Acesso local deve permitir PC e tablet na mesma rede, sem conta de nuvem como dependência.
+- Materiais científicos devem ser importados do repositório existente, sem cópia forçada nem reestruturação do repositório.
+- A sensação cinematográfica tem valor próprio: não substituí-la por dashboard empresarial genérico.
+- O mundo precisa ser utilizável sem VR; VR/MR continua ideia de expansão, não bloqueio.
+- Deve permitir navegação e organização coerentes, com estado persistente.
+
+---
+
+# 4. RODADAS 18–24 — FORMA DO MVP E DO COSMOS CIENTÍFICO
+
+## RODADA 18 — Plataforma, demo inicial e prioridades visuais
+
+**18.1 — A, aplicação no navegador [CONFIRMADO].**
+- Entrar pelo browser do PC.
+- Evitar instalador, Electron e administração de máquina como requisito inicial.
+- Tablet abre interface web especializada no caderno.
+
+**18.2 — C, demo populada por repositório científico real [CONFIRMADO].**
+- Repositório inicial de conteúdo: `IgorAmoras/data-driven-dynamics-and-control`.
+- Não inventar um conjunto genérico de arquivos de demonstração como experiência principal.
+- Importação deve demonstrar valor ao abrir scripts, notebook e notas existentes.
+
+**18.3 — B e A, em vez de C [CONFIRMADO; CORREÇÃO EXPLÍCITA].**
+- Priorizar **B: responsividade da interação**, juntamente com **A: qualidade visual cinematográfica**.
+- O usuário corrigiu uma seleção anterior que priorizava C/abrangência de integração.
+- Significado: primeira experiência deve ser bela e fluida, ainda que menos funcionalidades secundárias estejam prontas.
+
+## RODADA 19 — Semente científica e organização de repositório
+
+**19.1 — A com toque de C [CONFIRMADO COM RESSALVA].**
+- Região-mãe ampla de Engenharia de Controle → métodos orientados a dados → identificação → Koopman/SINDy/port-Hamiltonian → interfaces com IA.
+- Abrir já uma bancada utilizável, sem um cosmos de categorias desocupadas.
+- Duffing serve como exemplo real, não como limite temático do universo.
+
+**19.2 — C, arquivos podem se transformar em projeções espaciais [CONFIRMADO].**
+- Um script pode ter aspecto de objeto, painel, portal ou material relacionado.
+- Preservar identidade canônica ao alternar representação.
+
+**19.3 — C, estrutura do Git preservada [CONFIRMADO].**
+- Pastas e arquivos existentes continuam nos mesmos caminhos.
+- Study OS adiciona uma camada espacial de referências, não reescreve a árvore do repositório por conveniência visual.
+
+## RODADA 20 — Figuras, experimentos e análise comparativa
+
+**20.1 — C, artefatos com preview e comparação [CONFIRMADO].**
+- Gráficos, rollouts, espectros e figuras são elementos de primeira classe.
+- Permitir comparação lado a lado e inspeção de origem.
+
+**20.2 — C, núcleo navegável de experimento [CONFIRMADO].**
+- Cada experimento reúne links ao código, parâmetros conhecidos, métricas, outputs e histórico.
+- Pode possuir várias execuções.
+
+**20.3 — C, comparação com narrativa editável [CONFIRMADO].**
+- Usuário escreve interpretação e conclusão.
+- Não reduzir o experimento a um gráfico sem contexto.
+
+## RODADA 21 — Direção de arte
+
+**21.1 — C, “Cosmic Laboratory” [CONFIRMADO].**
+- Atmosfera de laboratório cósmico: visual futurista e científico, não fantasia desconexa.
+
+**21.2 — C, hierarquia cromática por disciplina e tipo [CONFIRMADO].**
+- Cor informa região/domínio e natureza do objeto.
+- Forma, rótulos e ícones também ajudam a reconhecer os elementos.
+
+**21.3 — C, mundo cinematográfico com modo de foco [CONFIRMADO].**
+- Efeitos em exploração e transições.
+- Movimento e distração reduzidos durante leitura/escrita.
+
+## RODADA 22 — Primitivas, iluminação e transições
+
+**22.1 — A, geometria primitiva [CONFIRMADO; C rejeitada].**
+- Esferas, cubos, poliedros e geometria abstrata consistente.
+- Não exigir objetos 3D complexos compostos como linguagem básica do universo.
+- Prioridade: consistência geométrica, identidade clara, fluidez.
+
+**22.2 — C, iluminação contextual [CONFIRMADO].**
+- Cosmos mais escuro na exploração; bancada iluminada e confortável no trabalho.
+- Não sacrificar leitura à estética.
+
+**22.3 — C, aproximação e abertura progressivas [CONFIRMADO].**
+- Distante: objeto abstrato.
+- Próximo: metadados / reconhecimento.
+- Selecionado: preview.
+- Aberto: portal/painel funcional.
+- Transição previsível e reversível.
+
+## RODADA 23 — Geografia espacial e portais
+
+**23.1 — C, regiões volumétricas + constelações transversais [CONFIRMADO].**
+- Áreas espaciais possuem identidade e volume.
+- Conceitos conectam regiões sem destruir sua estrutura local.
+
+**23.2 — C, zoom semântico + mundos aninhados [CONFIRMADO].**
+- Aproximar um tópico revela detalhes, relações e subestruturas.
+- Navegação em múltiplas escalas.
+
+**23.3 — C, portais com três operações [CONFIRMADO].**
+- Espiar/preview, projetar na bancada, ou viajar para o local canônico.
+- Sem exigir teleporte completo só para consultar um objeto.
+
+## RODADA 24 — Posicionamento, histórico e layouts
+
+**24.1 — C, disposição determinística e âncoras [CONFIRMADO].**
+- Objetos mantêm posições consistentes.
+- Organização manual não é perdida por recálculo de layout.
+
+**24.2 — C, histórico espacial + breadcrumbs + favoritos [CONFIRMADO].**
+- Voltar à câmera anterior, percorrer caminho, marcar locais importantes e recuperar bancadas.
+
+**24.3 — C, templates espaciais ajustáveis [CONFIRMADO].**
+- Bancadas reutilizáveis, ajustáveis e não rígidas.
+- Preservar arranjos escolhidos.
+
+---
+
+# 5. RODADAS 25–30 — LEITURA, CADERNO E DADOS
+
+## RODADA 25 — PDFs e fragmentação consciente
+
+**25.1 — C, leitura híbrida e extração [CONFIRMADO].**
+- Ler PDF dentro de interface funcional e extrair imagens, seleções, equações ou páginas para a bancada/caderno.
+- A extração não deve destruir o documento original.
+
+**25.2 — C, Paper Deck transformável [CONFIRMADO].**
+- Um conjunto de artigos pode ser visto como pilha compacta, lista pesquisável, galeria espacial ou comparação lado a lado.
+- É um mesmo agrupamento de papers com formas de apresentação distintas.
+
+**25.3 — C, destaques e decks de excertos persistentes [CONFIRMADO].**
+- Marcadores e recortes continuam ligados à página/documento de origem.
+- Permitir retomada da leitura e reutilização de trecho com contexto.
+
+## RODADA 26 — Fluxo de captura PC → caderno → tablet
+
+**26.1 — C, captura multimodal direta [CONFIRMADO].**
+- Seleção de texto, recorte de figuras, equações e imagens arrastáveis/copiáveis ao caderno.
+- Proveniência preservada: arquivo/URL/página/posição quando disponível.
+- OCR ou IA não são exigidos para uma captura simples.
+
+**26.2 — C, inserção contextual [CONFIRMADO].**
+- Se houver ponto ativo de inserção do caderno, inserir ali.
+- Se não houver, enviar o fragmento à bandeja de captura temporária.
+- Evitar que o recorte seja perdido ou entre em local aleatório.
+
+**26.3 — C, sincronização real-time sem roubar foco [CONFIRMADO].**
+- Nova captura aparece no outro dispositivo sem deslocar a câmera, zoom ou área de escrita.
+- Se cair fora da viewport, dar indicação discreta de conteúdo recebido.
+- Nunca rolar o tablet automaticamente enquanto o usuário desenha com a S Pen.
+
+## RODADA 27 — Composição multimodal, paginação e estrutura
+
+**27.1 — C, editor híbrido espacial [CONFIRMADO].**
+- Texto digitado, escrita vetorial, fórmulas, imagens, PDF e trechos de código coexistem no mesmo canvas.
+- Conteúdo movível e agrupável; preservar editabilidade de cada tipo.
+
+**27.2 — B, canvas genuinamente infinito [CONFIRMADO; CORREÇÃO IMPORTANTE].**
+- **Não** usar páginas convencionais ou páginas virtuais como unidade fundamental.
+- Sem bordas A4 nem paginação obrigatória.
+- Exportar PDF paginado posteriormente é uma operação derivada, não a estrutura interna.
+
+**27.3 — C, organização progressiva [CONFIRMADO].**
+- Começar livre e estruturar depois.
+- Frames, seções, grupos, links, índices e conexões opcionais.
+- Não exigir classificação antes de registrar pensamento.
+
+## RODADA 28 — Ergonomia da caneta e sincronização
+
+**28.1 — C, estojo científico completo e discreto [CONFIRMADO].**
+- Caneta, borracha, laço, marcador, formas e ferramentas úteis a desenho matemático/técnico.
+- Controles pequenos e recolhíveis; pressão da caneta quando disponível.
+- Garantir que ferramentas não obstruam superfície útil do tablet.
+
+**28.2 — C, S Pen escreve; dedos navegam; gestos configuráveis [CONFIRMADO].**
+- Palm rejection: evitar traços causados por mão apoiada.
+- Separar desenho, pan e zoom de forma previsível.
+- Seleção, movimentação, apagar e atalhos gestuais podem ser configurados.
+
+**28.3 — C, pipeline desacoplado [CONFIRMADO].**
+- Renderizar traço local imediatamente.
+- Transmitir incrementos ao PC, persistir em paralelo.
+- Não bloquear tinta esperando banco, websocket ou resposta do computador.
+- Reconectar sem duplicar traços ou reordenar visualmente o trabalho.
+
+## RODADA 29 — Escala do canvas e confiabilidade
+
+**29.1 — C, canvas infinito virtualizado [CONFIRMADO].**
+- Renderizar prioritariamente área visível.
+- Índice espacial, gerenciamento de elementos fora da tela e simplificação de detalhes distantes.
+- Um caderno com milhares de traços não pode travar o Tab S6 FE.
+
+**29.2 — C, manipulação híbrida [CONFIRMADO].**
+- Seleção por laço e por blocos; mover grupos, abrir espaço entre trechos de demonstração, alinhar, distribuir e reencaixar.
+- Preservar manuscrito original, figuras e vínculos de proveniência.
+
+**29.3 — C, persistência resiliente [CONFIRMADO].**
+- Alterações locais incrementais, autosave, desfazer/refazer, snapshots e recuperação após falha.
+- Sincronização após reconexão PC↔tablet.
+- Critério conceitual: distinguir «desenhou na tela», «foi salvo» e «foi sincronizado»; indicar problema discretamente.
+- O **comportamento de recuperação é requisito**, a presença de uma arquitetura de outbox/banco NÃO é.
+
+## RODADA 30 — Modelo de dados, exportações e Git (COM CORREÇÃO POSTERIOR)
+
+**30.1 — C, visão híbrida de persistência [CONFIRMADO COM CORREÇÃO DE MVP].**
+- No horizonte do produto: estruturas/índices/estado consultável localmente e arquivos independentes para PDFs, imagens, notebooks e código.
+- Sugestão inicial mencionava SQLite para metadados e arquivos locais para conteúdo.
+- **Correção explícita e vinculante do usuário:** «primeiro MVP não precisamos de um OUTBOX SQLITE; só eu vou usar».
+- Consequência: na primeira versão, **arquivos + JSON + servidor local simples são suficientes** se cumprirem salvamento e recuperação. SQLite é opcional e entra apenas se necessário. Sem outbox, broker, microserviços, fila corporativa ou múltiplos serviços distribuídos.
+
+**30.2 — C, exportação visual + estruturada [CONFIRMADO].**
+- Visual: PDF, SVG ou PNG para compartilhar/ler.
+- Estruturada: JSON/Markdown/LaTeX, na medida em que tipos de conteúdo permitirem, com assets e relações.
+- Preservar manuscrito como vetor editável em pacote nativo/aberto apropriado.
+- Não afirmar que todo PDF exportado mantém toda semântica e editabilidade; separar formatos por capacidade.
+
+**30.3 — B, Git como origem do projeto [CONFIRMADO; C não foi escolhido].**
+- Trabalhar sobre a estrutura e conteúdo do repositório real.
+- Links e alterações devem apontar aos arquivos originais.
+- Integração com branches/commits pode evoluir, mas manter a árvore real é essencial.
+- **Não** reinterpretar a decisão como obrigação de snapshots automáticos do conhecimento no GitHub (isso fazia parte da alternativa C rejeitada).
+- Git não versiona cada traço da S Pen.
+
+---
+
+# 6. RODADAS 31–37 — COMPUTAÇÃO CIENTÍFICA E FLUXO DIÁRIO
+
+## RODADA 31 — Navegador, código, notebook
+
+**31.1 — C, navegador híbrido [CONFIRMADO].**
+- Painel web integrado quando tecnicamente permitido.
+- Sites que bloqueiam iframe/incorporação abrem no navegador externo.
+- Preservar link e contexto ao navegar entre aplicações.
+- Não depender de conseguir embeber ChatGPT, Claude ou qualquer site de terceiros.
+
+**31.2 — C, editor integrado + VS Code [CONFIRMADO].**
+- Edições curtas de trechos de código dentro da bancada.
+- Projetos complexos podem abrir no VS Code externo.
+- Não reconstruir um IDE completo nem copiar arbitrariamente o repositório.
+
+**31.3 — C, Jupyter executável na bancada [CONFIRMADO].**
+- Células/notebooks podem chegar à bancada conectados a kernel Python local.
+- Reaproveitar Jupyter e pacotes existentes.
+- Implementação progressiva: primeiro conexão/abertura no ambiente já existente, depois interação direta.
+
+## RODADA 32 — Gráficos, reprodução e projeções
+
+**32.1 — C, gráficos híbridos [CONFIRMADO].**
+- Se dados estruturados estiverem disponíveis, oferecer zoom, pan, legenda, cursores/inspeção.
+- Se houver somente PNG/SVG, permitir abrir, ampliar e posicionar a figura.
+- Gráficos são objetos espaciais movíveis.
+
+**32.2 — C, experimento reproduzível [CONFIRMADO].**
+- Associar revisão do código, parâmetros, seed, dependências/ambiente e resultados, na medida em que disponíveis.
+- Reexecutar somente sob comando expresso.
+- Sinalizar divergência ambiental ou falta de informação quando impossibilitar reprodução idêntica.
+
+**32.3 — C, artefatos vinculados e projetáveis [CONFIRMADO].**
+- Gráficos/resultados pertencem à execução científica de origem.
+- Podem aparecer na bancada, deck ou quadro sem cópia semântica.
+- Abrir um resultado deve levar ao experimento responsável.
+
+## RODADA 33 — Execução, parâmetros e layout de visualizações
+
+**33.1 — C, execução híbrida [CONFIRMADO].**
+- Executar código na bancada ou no VS Code/Jupyter original.
+- Preservar referências aos outputs e execução.
+- Não disparar scripts automaticamente em background.
+
+**33.2 — A, editar parâmetros no código [CONFIRMADO; C rejeitada].**
+- Usuário prefere editar Python/células diretamente.
+- **Sem necessidade de sliders, formulários dinâmicos ou controles bidirecionais com AST** na primeira release.
+- O usuário é engenheiro e programa; não precisa transformar cada variável em GUI.
+
+**33.3 — A, gráficos independentes [CONFIRMADO; C rejeitada].**
+- Cada gráfico é objeto manipulável livremente.
+- Agrupar e comparar é possível, mas **não** há obrigação de construir um framework de dashboards interativos componíveis, callbacks cruzados e painéis fixos.
+- Simplificação deliberada de escopo.
+
+## RODADA 34 — Home, jornada e retomada
+
+**34.1 — B, Central de Projetos [CONFIRMADO; SUPERSEDE 8.1 para a Home].**
+- Home clara e estruturada: projetos, estudos recentes, próximos passos, progresso e atalhos.
+- **Não** um whiteboard completamente livre como landing page principal.
+- Whiteboards livres continuam existindo dentro de projetos.
+
+**34.2 — C, jornada científica navegável [CONFIRMADO].**
+- Mapa de tarefas, marcos e pré-requisitos.
+- Cada etapa funciona como destino para uma bancada/paper/experimento/nota.
+- Exemplo: estudar observadores ou processos gaussianos e abrir diretamente seu contexto de pesquisa.
+
+**34.3 — C, checkpoint contextual [CONFIRMADO].**
+- Salvar automaticamente o estado da bancada.
+- Opcionalmente registrar «onde parei», «o que descobri» e «próximo passo».
+- Retomar sem preencher formulário obrigatório e sem IA.
+
+## RODADA 35 — Tarefas, progresso e contexto científico
+
+**35.1 — C, tarefas como portais [CONFIRMADO].**
+- Card aponta para bancada, scripts, papers, cadernos, gráficos e experimentos.
+- Uma tarefa não deve duplicar informações nem ficar isolada do trabalho correspondente.
+
+**35.2 — B, marcos científicos qualitativos [CONFIRMADO; C rejeitada para primeiro corte].**
+- Estados como explorar, compreender, implementar, validar, documentar.
+- Não usar percentuais fictícios de «domínio do conceito».
+- Progresso multidimensional detalhado não é requisito inicial.
+
+**35.3 — C, prévia contextual + entrada direta [CONFIRMADO].**
+- Home permite ver relações, materiais e último checkpoint.
+- Um clique abre a bancada ligada à tarefa.
+
+## RODADA 36 — Home modular, foco e multiprojetos
+
+**36.1 — C, dashboard modular [CONFIRMADO].**
+- Home vem pronta e estruturada.
+- Usuário pode mover, ocultar, redimensionar ou adicionar módulos conforme a necessidade.
+- Diferenciar modularidade de canvas completamente livre.
+
+**36.2 — B, foco do dia [CONFIRMADO; C rejeitada].**
+- Seleção deliberada de um objetivo principal e poucas atividades secundárias.
+- Não tornar uma Home lotada com todos os projetos competindo pela atenção.
+- Continuar possível consultar outras frentes, mas sem ser o centro da tela.
+
+**36.3 — C, projetos separados num universo compartilhado [CONFIRMADO].**
+- Repositórios, materiais e bancadas mantêm fronteiras de projeto.
+- Conceitos, referências e relações podem atravessar essas fronteiras.
+- Ex.: álgebra linear e identificação podem fundamentar múltiplas pesquisas.
+
+## RODADA 37 — Sessões, retomada e ergonomia cognitiva
+
+**37.1 — C, sessão instantânea com planejamento opcional [CONFIRMADO].**
+- Abrir a bancada em um clique e começar.
+- Se desejar, inserir objetivo/duração/observações da sessão.
+- Nunca criar ritual obrigatório antes de estudar.
+
+**37.2 — C, retomada contextual [CONFIRMADO].**
+- Restaurar painéis, lugares, documentos, páginas, zoom/posição relevantes e último ponto de trabalho.
+- Mostrar checkpoint de forma discreta, sem capturar foco ou interromper navegação.
+
+**37.3 — C, três modos de trabalho [CONFIRMADO].**
+- **Explorar:** cosmos 3D, conceitos, regiões, conexões.
+- **Estudar:** bancada espaçosa com PDF/código/caderno lado a lado.
+- **Foco:** poucos materiais, distração e animação reduzidas.
+- Os três são representações do MESMO estado e dos MESMOS objetos, não aplicativos separados.
+
+**Marco após a rodada 37 [CONFIRMADO]:** encerrar discovery conceitual e partir para implementação. O próximo passo é produzir artefatos/código, não prolongar a entrevista com novas rodadas obrigatórias.
+
+---
+
+# 7. REQUISITOS TRANSVERSAIS CONSOLIDADOS
+
+## 7.1. Modelo mental
+
+- A «fonte da verdade» de um paper/script é o arquivo ou URL de origem; a representação espacial é uma projeção.
+- Um item pode ter múltiplas referências e projeções sem criar cópias independentes.
+- Distinções fundamentais: entidade, relação, região, deck, bancada, portal, arquivo físico, caderno, fragmento, tarefa e execução.
+- Layout/câmera não devem alterar identidade nem proveniência do objeto.
+- Proximidade científica tem dimensões **conceitual** e **operacional**: duas peças podem estar longe no universo e juntas na bancada.
+
+## 7.2. PC e tablet
+
+- PC: universo 3D, Home, PDFs, navegador, código, Jupyter, visualizações, bancada e também Super Caderno.
+- Tablet: **somente Super Caderno Vivo**, com interface para S Pen e canvas; não precisa de visualização 3D pesada.
+- Comunicação bidirecional real-time dos dados do caderno; não transmitir tela como vídeo.
+- O tablet renderiza o traço independentemente do servidor; os eventos são sincronizados em paralelo.
+- Alteração vinda do outro dispositivo não pode roubar foco nem mover a viewport.
+- Recuperar após desconexão sem duplicação de traços.
+
+## 7.3. Canvas multimodal
+
+- Espaço infinito, não paginado.
+- Manuscrito vetorial; texto editável; imagens e recortes; matemática; blocos de código e referências PDF.
+- Ferramentas científicas de escrita, laço, borracha, seleção, move/resize e agrupamento.
+- Frames/seções e hierarquia opcionais.
+- Renderização otimizada por visibilidade e escala.
+- Suportar edição futura e exportação sem achatar o conteúdo de maneira irreversível.
+
+## 7.4. Leitura científica e proveniência
+
+- PDF lido em painel legível, com seleção e recorte.
+- Fragmentos guardam URL/caminho, documento, página e localização quando disponível.
+- Deck de papers com diferentes visualizações.
+- Original sempre recuperável a partir de um fragmento.
+- OCR/LaTeX assistido e descoberta acadêmica automática ficam para depois do MVP.
+
+## 7.5. Experimentação
+
+- Scripts e notebooks mantidos no repositório Git.
+- Execução por Jupyter/VS Code ou interface integrada, quando implementado.
+- Parâmetros editados no código; evitar controles visuais artificiais.
+- Histórico de execuções rastreável quando possível: parâmetros, commit, seed, ambiente e outputs.
+- Gráficos independentes com zoom/interação quando houver dados; objetos vinculados à sua execução.
+- Possibilidade de comparar métodos (ex.: Koopman vs SINDy) e escrever conclusões.
+
+## 7.6. Contexto e continuidade
+
+- Home é Central de Projetos modular e sóbria.
+- Prioridade visual: foco do dia.
+- Tarefas-portais ligadas aos objetos reais.
+- Roadmaps com relações/pré-requisitos e marcos científicos, sem porcentagens fictícias.
+- Checkpoints opcionais e retomada de bancadas com estado persistente.
+- Modos Explorar, Estudar e Foco usam a mesma base de dados.
+
+---
+
+# 8. ESCOPO DA PRIMEIRA RELEASE: OBRIGATÓRIO, EVOLUTIVO E ADIADO
+
+## 8.1. Obrigações de produto para o primeiro fluxo vertical integrado [CONFIRMADAS COMO DIREÇÃO]
+
+1. Abrir no navegador do PC com uma experiência 3D visualmente marcante e fluida.
+2. Navegar por regiões científicas estáveis e abrir pelo menos uma bancada útil.
+3. Importar/abrir material REAL do repositório `data-driven-dynamics-and-control` sem reestruturá-lo.
+4. Ler um PDF e transferir ao Super Caderno ao menos um recorte/fragmento com proveniência (pode usar PDF de teste importado, pois a árvore verificada do repositório não contém PDF confirmado).
+5. Escrever com a S Pen no Galaxy Tab S6 FE e observar a mesma edição no PC.
+6. Garantir que a escrita continue fluida se houver lentidão de rede e que mudanças possam ser recuperadas.
+7. Salvar e restaurar disposição de bancada e conteúdo do caderno.
+8. Exibir Home com projeto/retomada/foco, de maneira mínima mas funcional.
+9. Fazer tudo isso **sem IA e sem API paga**.
+10. Não adicionar infraestrutura distribuída só para simular escala de múltiplos usuários.
+
+A ordem exata das fatias de engenharia ainda não foi aprovada em detalhe; a direção acima representa uma proposta de fluxo vertical coerente com as decisões.
+
+## 8.2. Evolução natural após o primeiro fluxo
+
+- Leitura mais completa de PDFs e Paper Deck.
+- Ícones/gramática espacial refinados.
+- Importação mais rica de repositórios.
+- Edição nativa de scripts e células Jupyter na bancada.
+- Gráficos científicos independentes interativos.
+- Linhagem robusta e comparação de experimentos.
+- Roadmaps/whiteboards por projeto mais completos.
+- Exportação estruturada de todos os tipos.
+- Otimização de canvas para volumes maiores, medida no hardware real.
+
+## 8.3. Não objetivos da primeira release [CONFIRMADO]
+
+- Qualquer LLM, agente, classificador, tutor automático, OCR obrigatório, inferência semântica ou processamento de linguagem dependente de modelo.
+- Meta-agente, roteador de modelos, benchmarks de LLM ou execução remota paga.
+- Autenticação multiusuário, permissões empresariais ou colaboração para equipes.
+- SQL outbox, Kafka, brokers, arquitetura de eventos corporativa, microserviços, deployment cloud complexo.
+- VR/MR como requisito de uso.
+- Refazer VS Code, Jupyter ou navegador web do zero.
+- Framework de sliders automáticos ou dashboards interativos complexos.
+- Escrever em Git a cada traço manuscrito.
+- Alterar silenciosamente as posições espaciais escolhidas pelo usuário.
+- Obrigar páginas, formulários de sessão, checklists ou classificação antes de estudar.
+
+---
+
+# 9. ARQUITETURA LEVE DE REFERÊNCIA [PROPOSTA, NÃO STACK CONGELADA]
+
+Um desenho suficiente para 1 usuário / 2 dispositivos:
+
+```
+PC: navegador (React/TS)
+  |-- Home / Central de Projetos
+  |-- Universo 3D (ex.: Three.js + React Three Fiber)
+  |-- Bancada / portais / documentos (ex.: PDF.js)
+  |-- Super Caderno Vivo (canvas próprio ou biblioteca existente)
+  |
+  +--- HTTP/WebSocket --- serviço local único no PC (ex.: Node.js)
+                           |-- leitura/escrita de arquivos e JSON
+                           |-- sincronização do caderno
+                           |-- mapeamento para repositórios Git locais
+                           |-- ponte opcional com Jupyter/Python
+                           +-- histórico de estado/recuperação
+
+Tablet: navegador leve
+  |-- Super Caderno Vivo (S Pen / Pointer Events)
+  |-- renderização e buffer locais
+  +--- WebSocket / reconexão
+```
+
+Observações técnicas:
+- **Sem outbox e sem SQLite obrigatório.** Se persistência em arquivo exigir cuidados, usar gravação atômica (`arquivo temporário -> rename`) e snapshots simples, sem inventar uma pilha de event sourcing.
+- Para permitir recuperação se a conexão cair, pode-se usar armazenamento persistente do navegador no tablet (por exemplo IndexedDB, com teste explícito de políticas de retenção) ou outro buffer local apropriado. **Isto é uma proposta técnica**, não escolha de banco autorizada pelo usuário.
+- O servidor local deve ficar acessível ao tablet por LAN e tratar autorização de modo proporcional ao risco, sobretudo se houver acesso a código/arquivos privados; não pressupor que “rede local” significa rede confiável. Segurança simples não é segurança ausente.
+- Evitar sincronizar dados de Jupyter durante a escrita manuscrita quando isso não for necessário.
+- Os scripts continuam executando no ambiente Python escolhido; a UI não deve inventar um segundo Python.
+- GitHub é remoto opcional para o código e os repositórios; o app local trabalha com arquivos reais.
+- Exigir medições de fluidez e memória no Galaxy Tab S6 FE antes de selecionar biblioteca de canvas definitiva.
+
+---
+
+# 10. MODELO CONCEITUAL DE DADOS [PROPOSTO PARA IMPLEMENTAÇÃO]
+
+Tipos (não pressupõem tabelas SQL):
+
+- `Project`: id, nome, caminho absoluto ou URI do repositório, branch/commit quando conhecidos, configurações locais.
+- `KnowledgeEntity`: id, tipo (concept|paper|file|notebook|task|experiment|plot|note|fragment), título, fonte canônica, projeto.
+- `Relation`: id, origem, destino, tipo explícito, autor/origem, metadados.
+- `SpatialRegion`: id, parent_id, posição/escala, aparência, região conceitual.
+- `Projection`: id, entity_id, region/workspace_id, transformação, estado de painel, papel.
+- `Workspace`: id, project_id, nome, painéis, dimensões, câmera, modo e estado restaurável.
+- `NotebookCanvas`: id, projeto, estado do canvas, sistema de coordenadas infinito, índice de objetos.
+- `CanvasElement`: id único, tipo, geometria/posição, estilo, payload editável, grupo/frame, origem.
+- `PenStroke`: id estável, sequência ordenada de pontos/pressão quando fornecida pelo hardware, estilo.
+- `SourceFragment`: documento de origem, página, localização, trecho/corte, asset e vínculos.
+- `StudyTask`: id, status/marco científico, links para objetos, prioridade/foco, próximo passo.
+- `StudyCheckpoint`: instante, projeto, bancada e tarefa, texto opcional, objeto de foco.
+- `ExperimentRun`: caminho do código, commit ou hash, parâmetros conhecidos, seed/ambiente, artefatos e resultados.
+- `Artifact`: id, arquivo/dataset/figura, tipo, vínculo de geração e representação espacial.
+
+Princípios de IDs e integridade:
+- IDs duráveis para elementos do canvas; evitar usar posição na tela como identidade.
+- Alterações incrementais idempotentes por ID/versão quando necessário para reconexão (não significa outbox SQL).
+- Referências a arquivos externos têm informação suficiente para detectar se foram renomeados ou alterados.
+- Separar `conteúdo`, `estado da interface` e `projeção espacial`, para não duplicar entidades.
+
+**Este modelo é recomendação de engenharia.** Não foi aprovado como esquema de produção, não obriga backend SQL e deve ser reduzido ao mínimo ao iniciar o código.
+
+---
+
+# 11. TESTES DE ACEITAÇÃO E CRITÉRIOS DE QUALIDADE [PROPOSTOS]
+
+## Fluxo completo de estudo
+
+1. Abrir Study OS no PC e visualizar Home com projeto disponível.
+2. Entrar no universo e navegar até Identificação/Koopman.
+3. Abrir bancada com script, PDF e Super Caderno.
+4. Selecionar figura/texto no PDF e inserir no caderno.
+5. Abrir caderno no tablet e confirmar que o fragmento aparece sem deslocar o foco de escrita.
+6. Desenhar uma derivação com S Pen e ver o traço no PC.
+7. Adicionar texto editável ao lado do manuscrito e mover conjunto usando laço/grupo.
+8. Desconectar Wi-Fi; continuar escrevendo; reconectar; verificar ausência de perdas/duplicações.
+9. Fechar/reabrir, restaurar traços, texto, posições, material, câmera e checkpoint.
+10. Voltar ao arquivo original pelo vínculo de proveniência.
+
+## Performance
+
+- A renderização do traço deve ocorrer no dispositivo onde a caneta está tocando a tela, sem round-trip de rede.
+- Medir latência percebida da escrita em hardware real, não apenas num PC rápido.
+- Avaliar canvas com milhares de traços, centenas de blocos, zoom extremo e pan contínuo.
+- Garantir que elementos fora da viewport não consumam renderização proporcional ao número total de traços.
+- Reduzir efeitos visuais ao entrar no modo Foco.
+- Testar perda de rede, refresh involuntário, encerramento do browser e recuperação.
+
+## Integridade/proveniência
+
+- Não duplicar entidades por arrastar um mesmo paper para bancadas diferentes.
+- Diferenciar figura exportada de dados científicos originais.
+- Não reexecutar scripts automaticamente só porque um gráfico foi aberto.
+- Detectar alteração externa em arquivo do Git sem sobrescrever silenciosamente trabalho novo.
+- Indicar quando salvar/sincronizar falhar.
+
+## Segurança proporcional
+
+- Servidor local não deve se expor inadvertidamente à Internet.
+- Solicitar consentimento explícito para executar código Python/scripts a partir da interface.
+- Operar sobre diretórios explicitamente autorizados e evitar acesso irrestrito à máquina.
+- Não incluir tokens GitHub, chaves de API ou credenciais no repositório/versionamento.
+
+---
+
+# 12. CONTEÚDO REAL PARA A PRIMEIRA DEMONSTRAÇÃO
+
+**Repositório de pesquisa:** `IgorAmoras/data-driven-dynamics-and-control` (branch `main` mencionada e consultada durante o discovery).
+
+Estrutura de interesse previamente observada:
+
+```
+readme.md
+requirements.txt
+research_memorandum.ipynb
+meeting_notes/
+  2026-10-19_reuniao_luciano.md
+systems/
+  duffing_oscillator/
+    SINDy.py
+    SINDy_with_disturbances.py
+    classic_koopman.py
+    input_output_identification.py
+    koopman_via_lmis.py
+    port_hamiltonian_duffing.py
+    port_hamiltonian_duffing_hidden_state.py
+    port_hamiltonian_duffing_with_disturbances.py
+    port_hamiltonian_noise_analysis.md
+    duffing_ph_intro_rollout.png
+    duffing_ph_noise_rollouts.png
+```
+
+**Observações de fidelidade:**
+- Essa árvore foi observada numa consulta anterior; verificar novamente antes de implementar, pois o repositório pode ter mudado.
+- Não foi confirmada presença de PDFs diretamente nessa árvore; adicionar PDFs próprios legalmente obtidos como fixtures de leitura, sem fingir que já estavam ali.
+- Relatório `port_hamiltonian_noise_analysis.md` contém resultados e contexto; cuidado para não tratá-los como saídas de uma execução atual ainda não realizada.
+- Arquivo de reunião com orientador tem temas de próximos passos, como estado oculto e processos gaussianos; é um bom teste de associação entre tarefa, paper, script e bancada.
+- O repositório `IgorAmoras/study-os` foi mencionado como destino possível do código e era vazio na última verificação anterior. Validar estado real antes do primeiro commit.
+
+**Cenário de demonstração pretendido:**
+- Região Engenharia de Controle → Identificação → Duffing.
+- Projetar `classic_koopman.py`, `SINDy.py`, notebook e um gráfico de saída na bancada.
+- Manter notas manuscritas no tablet, capturar trecho de paper e associá-lo a um experimento.
+- Salvar checkpoint e retomar depois.
+
+---
+
+# 13. PROPOSTA DE FATIAS DE IMPLEMENTAÇÃO (NÃO UMA NOVA RODADA)
+
+**Fatia 0 — Fundação e critérios de qualidade.**
+- Repositório, comandos simples de desenvolvimento, testes, estrutura de assets, sem dependências desnecessárias.
+- Definir formato mínimo de persistência e política de recuperação.
+
+**Fatia 1 — Cosmos convincente e estável.**
+- Uma região científica real, objetos com gramática geométrica, câmera, preview, viagem/projeção, transições e posições persistentes.
+- Priorizar fluidez e qualidade visual (18.3 B+A).
+
+**Fatia 2 — Bancada com materiais reais.**
+- Portais para arquivo/PDF/código, arranjo de painéis, estado recuperável.
+- Integração leve ao Git local.
+
+**Fatia 3 — Super Caderno Vivo.**
+- Canvas infinito com tinta vetorial, texto, seleção, laço, S Pen e gestos.
+- Mesmo documento nos dois dispositivos via rede local.
+- Reconexão, salvamento, viewport estável e testes no tablet.
+
+**Fatia 4 — Captura PDF → Caderno.**
+- Seleção/recorte com proveniência; ponto de inserção ou bandeja de captura; propagação sem roubar foco.
+
+**Fatia 5 — Home/retomada.**
+- Central de Projetos, foco do dia, tarefa-portal mínima, sessão instantânea, restauração de bancada.
+
+**Fatia 6 — Laboratório científico completo progressivo.**
+- Jupyter conectado, editor curto, gráficos independentes, registro mínimo de execuções, comparação e roadmaps.
+
+**Cuidado:** estas fatias são uma sequência de engenharia recomendada, não compromisso formal com prazos ou promessa de que todas farão parte do primeiro lançamento simultaneamente. Validar uma fatia funcionando antes de ampliar o alcance.
+
+---
+
+# 14. ÍNDICE DE DECISÕES E CORREÇÕES (CONSULTA RÁPIDA)
+
+| Identificador | Escolha final / observação |
+| --- | --- |
+| 1.1 | B com estética A |
+| 1.2 | C inclinação B |
+| 1.3 | C |
+| 1.4 | C |
+| 1.5 | C |
+| 2.1 | C > A > B (ordem de prioridades) |
+| 2.2 | composição de bancada; não apenas proximidade física |
+| 2.3 | C |
+| 2.4 | C |
+| 2.5 | C |
+| 3.1 | B com C (blocos; promoção seletiva) |
+| 3.2 | C com B (regiões, decks e arquivos distintos) |
+| 3.3 | C |
+| 3.4 | B primeiro; C futuro |
+| 3.5 | C |
+| 4.1 | C |
+| 4.2 | C |
+| 4.3 | C |
+| 4.4 | C |
+| 4.5 | C + restauração contextual |
+| 5.1 | C |
+| 5.2 | A (objetos holográficos abstratos) |
+| 5.3 | C |
+| 5.4 | C, sem IA no MVP |
+| 5.5 | B com C |
+| 6.1 | C, Discovery Engine só posteriormente |
+| 6.2 | A+B+C (progressivo) |
+| 6.3 | C |
+| 6.4 | C+B |
+| 6.5 | B+C |
+| 7.1 | sincronização BIDIRECIONAL real-time |
+| 7.2 | C |
+| 7.3 | C |
+| 7.4 | tablet apenas Super Caderno |
+| 7.5 | captura Knowledge Gravity proposta; concretizada em 26 |
+| 8.1 | A histórico; superado por 34.1 B na Home |
+| 8.2 | C |
+| 8.3 | C |
+| IA.1 | C — futuro |
+| IA.2 | C — futuro |
+| IA.3 | C — proveniência |
+| IA.4 | B — futuro |
+| IA.5 | B — futuro |
+| IA.6 | C — futuro |
+| IA.7 | A — zero API paga automática |
+| IA.8 | B — futuro |
+| IA.9 | C — futuro |
+| IA.10 | C — futuro |
+| MVP.1 | A+B+C, fatias integradas |
+| MVP.2 | stack a critério de simplicidade/manutenção |
+| MVP.3 | GitHub autorizado como opção |
+| 18.1 | A (browser) |
+| 18.2 | C (repo real) |
+| 18.3 | B+A, NÃO C |
+| 19.1 | A com C |
+| 19.2 | C |
+| 19.3 | C |
+| 20.1 | C |
+| 20.2 | C |
+| 20.3 | C |
+| 21.1 | C |
+| 21.2 | C |
+| 21.3 | C |
+| 22.1 | A (primitivas 3D) |
+| 22.2 | C |
+| 22.3 | C |
+| 23.1 | C |
+| 23.2 | C |
+| 23.3 | C |
+| 24.1 | C |
+| 24.2 | C |
+| 24.3 | C |
+| 25.1 | C |
+| 25.2 | C |
+| 25.3 | C |
+| 26.1 | C |
+| 26.2 | C |
+| 26.3 | C |
+| 27.1 | C |
+| 27.2 | B — canvas infinito SEM páginas |
+| 27.3 | C |
+| 28.1 | C |
+| 28.2 | C |
+| 28.3 | C |
+| 29.1 | C |
+| 29.2 | C |
+| 29.3 | C |
+| 30.1 | C visão híbrida; no MVP sem SQLite/outbox obrigatório |
+| 30.2 | C |
+| 30.3 | B — Git como origem do projeto |
+| 31.1 | C |
+| 31.2 | C |
+| 31.3 | C |
+| 32.1 | C |
+| 32.2 | C |
+| 32.3 | C |
+| 33.1 | C |
+| 33.2 | A — parâmetros no código |
+| 33.3 | A — gráficos independentes |
+| 34.1 | B — Central de Projetos |
+| 34.2 | C |
+| 34.3 | C |
+| 35.1 | C |
+| 35.2 | B — marcos científicos qualitativos |
+| 35.3 | C |
+| 36.1 | C |
+| 36.2 | B — foco do dia |
+| 36.3 | C |
+| 37.1 | C |
+| 37.2 | C |
+| 37.3 | C |
+
+---
+
+# 15. PONTOS A NÃO DISTORCER NOS PRÓXIMOS CHATS
+
+1. **“C” em 30.1 não significa “instalar SQLite/outbox no MVP”.** Correção posterior prevalece.
+2. **“C” em 27.1 não significa “páginas virtuais”.** 27.2 foi **B, canvas infinito**.
+3. **A Home não é um whiteboard livre.** 34.1 **B**, 36.1 **C**: Central de Projetos modular. Os projetos têm whiteboards próprios.
+4. **Foco do dia é 36.2 B, não C.** Um objetivo principal e poucas tarefas secundárias.
+5. **Parâmetros são editados no Python.** 33.2 **A**, não construtor de slider.
+6. **Gráficos são independentes.** 33.3 **A**, não framework obrigatório de dashboards.
+7. **Git como origem do projeto.** 30.3 **B**, não equivaler à alternativa C de snapshots automáticos do conhecimento.
+8. **Visual importa.** 18.3 = **B+A**, interação responsiva e visual cinematográfico; não apenas checklist de integrações.
+9. **Objetos 3D básicos são abstratos.** 5.2 **A** e 22.1 **A**; não renderizar todas as entidades como janelas planas permanentes.
+10. **PC e tablet são assimétricos.** Tablet desenha/organiza caderno, PC trabalha o cosmos e o laboratório.
+11. **A tinta tem prioridade sobre sincronização.** Não bloquear o gesto da S Pen por rede/persistência.
+12. **IA fora da primeira release.** Mesmo “modelo local pequeno só para classificar” é futuro, não dependência atual.
+13. **Uma pessoa por enquanto.** Resistir a overengineering, sem perder integridade de dados.
+14. **Discovery encerrado.** Rodada 38 = implementação, não continuação automática de perguntas.
+
+---
+
+# 16. STATUS E PRÓXIMA AÇÃO
+
+**Discovery:** conceitualmente encerrado.  
+**Riscos maiores de engenharia:** qualidade e desempenho de tinta no Tab S6 FE via navegador; confiabilidade de sincronização/reconexão; integração PC↔tablet; experiência 3D cinematográfica sem sobrecarregar a UI; integração de PDFs com seleção fiel e proveniência; preservação de estado.  
+**Próxima ação sugerida:** colocar este registro no repositório `study-os` (por exemplo `docs/discovery/2026-11-04-study-os-37-rodadas.md`) e iniciar a Fatia 0/1 por código testável.  
+**O que este documento ainda NÃO faz:** não cria commits, não implementa o aplicativo e não afirma que todos os recursos descritos já existem.
+
+**Regra do projeto:** um sistema para pensar e estudar de verdade; beleza e fluidez como produto; integridade e portabilidade do conhecimento; IA somente quando o núcleo já funcionar.
+
+---
+
+FIM DO REGISTRO MESTRE — STUDY OS — 04/11/2026.

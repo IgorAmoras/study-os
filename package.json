@@ -1,0 +1,33 @@
+{
+  "name": "study-os",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Study OS · spatial research studio · first integrated vertical slice",
+  "engines": {"node": ">=20.19"},
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "vite --host 127.0.0.1",
+    "dev:server": "node --watch server/index.mjs",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "start": "node server/index.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run test && npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.0",
+    "@react-three/fiber": "^9.8.2",
+    "pdfjs-dist": "^5.4.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "^0.182.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "^0.182.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.3.0"
+  }
+}

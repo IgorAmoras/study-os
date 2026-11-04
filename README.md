@@ -1,0 +1,111 @@
+# Study OS · Cosmic Laboratory
+
+**Primeiro incremento executável** do Study OS, conforme as 37 rodadas de discovery de 04/11/2026.
+
+> Objetivo: estudar e pesquisar num ambiente espacial local-first, com universo 3D, bancada, arquivos científicos reais, leitura de PDF e Super Caderno Vivo entre PC e tablet. **Sem IA nesta release.**
+
+## Iniciar no Windows (PowerShell)
+
+Requisitos: Node.js **20.19+** (preferencialmente Node 22 LTS), npm, Chrome/Edge atualizado.
+
+```powershell
+cd study-os
+npm install
+npm run dev
+```
+
+Abra **http://127.0.0.1:5173** no PC. `npm run dev` inicia o servidor de dados na porta 4317 e o Vite na 5173, ambos acessíveis **somente no próprio PC**. A aplicação carrega com Home, universo 3D e bancada. Os dados persistentes são salvos em `.studyos-data/` (fora do Git).
+
+### Associar o repositório científico verdadeiro
+
+O Study OS nunca altera ou duplica os scripts do repositório de pesquisa:
+
+```powershell
+# Em outra pasta, só na primeira vez:
+git clone https://github.com/IgorAmoras/data-driven-dynamics-and-control.git
+
+# Ajuste para o caminho real no seu computador antes de iniciar o Study OS:
+$env:STUDYOS_RESEARCH_DIR = "C:\CAMINHO\data-driven-dynamics-and-control"
+npm run dev
+```
+
+Se o repositório não estiver configurado, os links originais do GitHub continuam disponíveis, mas o painel não consegue abrir os arquivos locais. O caminho é uma autorização **explícita e somente leitura**: a API rejeita acesso fora desta árvore.
+
+### Tablet Galaxy Tab S6 FE / S Pen (mesma rede Wi-Fi)
+
+Na máquina Windows:
+
+```powershell
+npm run build
+$env:STUDYOS_HOST = "0.0.0.0"
+npm start
+```
+
+No terminal aparecerá um **token de acesso**; não o divulgue. Descubra o IPv4 local do PC com `ipconfig` e acesse no tablet `http://IP-DO-PC:4317/?tablet=1`. Insira o token quando o Study OS solicitar. Autorize a porta **somente na rede privada** no firewall do Windows, se necessário. Não exponha esta porta diretamente à internet.
+
+No modo tablet a interface abre **somente o Super Caderno**, sem iniciar WebGL/Three.js. A caneta escreve diretamente no canvas, os dedos movem a visualização e os novos traços são salvos no armazenamento local do navegador antes de sincronizar pelo WebSocket. Ao reconectar, pendências são reenviadas e os traços remotos são recuperados, preservando zoom e posição locais.
+
+> Atenção: acesso por HTTP na LAN não criptografa o token ou os dados. Use **somente rede Wi-Fi privada e confiável**; para uso fora de casa, acrescente HTTPS e autenticação apropriada. Não é um servidor público.
+
+## Funcionalidades desta entrega
+
+| Área | Implementado neste incremento |
+|---|---|
+| Central | Foco do dia, checkpoints e retomada da bancada |
+| Universo | Objetos científicos WebGL com coordenadas 3D estáveis, constelações, zoom/órbita e seleção de destinos |
+| Bancada | Painéis movíveis e redimensionáveis; arquivos reais de código, Markdown e notebooks `.ipynb` em leitura |
+| PDF | Importar PDF do próprio computador, salvar fora do Git, renderizar páginas por PDF.js, extrair texto selecionável com origem (documento/página) |
+| Caderno | Canvas de coordenadas infinitas, traços vetoriais com pressão quando disponível, S Pen, texto, zoom, pan e cor |
+| Sincronização | WebSocket PC↔tablet; IndexedDB para pendências offline, IDs idempotentes, salvamento atômico no servidor |
+| Dados | JSON e arquivos locais; nenhuma API paga, serviço de IA ou SQLite obrigatório |
+
+Para capturar um texto de PDF: na **Bancada**, clique **+ PDF**, abra o documento importado, selecione um trecho do texto extraído, e escolha **Enviar texto ao caderno**. Sem seleção ativa, a ação usa o texto extraível da página, até 4.000 caracteres. O texto é inserido na área de trabalho do caderno com nome do arquivo e número da página; OCR e recorte de figuras serão posteriores.
+
+## Verificação
+
+```powershell
+npm test             # Testes automatizados do servidor/API/arquivos/WS
+npm run build        # Build de produção React/Three.js/PDF.js
+npm run typecheck    # Verificação TypeScript da ilha WebGL
+```
+
+> Limitação de validação do ambiente de geração em 04/11/2026: **os testes Node de backend passaram**, mas o ambiente não tinha acesso DNS ao npm, portanto não foi possível baixar as dependências e executar `npm run build`/`npm run typecheck` da nova interface aqui. Execute esses comandos no seu computador antes de confiar no frontend. O bundle `dist/` não está incluído; será produzido pelo Vite depois de `npm install`. Um frontend anterior, sem dependências, permanece em `legacy/` como fallback para testes locais de servidor, mas **a experiência WebGL/PDF.js atual fica no código `src/`**.
+
+## Estrutura
+
+```text
+study-os/
+├── index.html                 # Entrada Vite da interface atual
+├── src/
+│   ├── app.js                 # Home, bancada, importação, painéis e modos
+│   ├── cosmos-react.tsx       # React + R3F + Three.js (WebGL, sob demanda)
+│   ├── nodes.js               # Nós científicos/posições estáveis
+│   ├── pdf.js                 # PDF.js: páginas, texto e captura
+│   ├── notebook.js            # Canvas de tinta local-first, IndexedDB e WS
+│   └── styles.css             # Cosmic Laboratory
+├── server/
+│   ├── index.mjs              # Node HTTP + validação de caminhos/PDF
+│   ├── store.mjs              # Persistência atômica JSON
+│   └── websocket.mjs          # Canal de tinta e replicação
+├── tests/                     # Testes Node sem dependências externas
+├── public/                    # Favicon copiado pelo Vite
+├── legacy/                    # Interface anterior sem dependências (fallback)
+├── docs/discovery/            # Registro integral consolidado
+└── scripts/dev.mjs            # Inicialização conjunta Node + Vite
+```
+
+## Não está implementado ainda
+
+Não tratar esta fatia como produto completo das 37 rodadas. Faltam extração gráfica/figuras PDF, OCR, edição nativa de código, execução Jupyter integrada, grupos/seleção por laço/undo-redo completos do caderno, zoom semântico refinado, múltiplos projetos editáveis, histórico avançado de experimentos, segurança de acesso remoto, e testes reais de latência de S Pen no Tab S6 FE. O frontend WebGL ainda depende da verificação de build e do teste em hardware real.
+
+## Decisões preservadas
+
+- Home: **Central de Projetos modular**, não canvas livre na entrada.
+- Mundo: entidades canônicas, projeções e posições estáveis; sem rearranjo silencioso.
+- Tablet: **só Super Caderno**, não universo 3D nem Jupyter.
+- Projetos: Git e arquivos reais continuam como fonte de verdade.
+- Caderno: espaço infinito, original vetorial da S Pen, sem IA obrigatória.
+- Usuário: **um só**, sem contas corporativas/microserviços/outbox SQLite.
+- Sem IA na primeira release, mesmo que modelos locais sejam baratos.
+
+O registro mestre está em `docs/discovery/2026-11-04-37-rodadas.txt`.
