@@ -21,7 +21,7 @@ const BASE = {
   ],
   workspace: {
     selected: 'duffing',
-    camera: { yaw: -0.42, pitch: 0.16, distance: 18, target: [5, 0, 0] },
+    camera: { yaw: -0.42, pitch: 0.16, distance: 25, target: [5, 0, 0] },
     panels: [
       { id: 'code', kind: 'code', title: 'classic_koopman.py', path: 'systems/duffing_oscillator/classic_koopman.py', x: 2, y: 9, w: 50, h: 79 },
       { id: 'notes', kind: 'notes', title: 'Caderno de pesquisa', path: 'meeting_notes/2026-10-19_reuniao_luciano.md', x: 54, y: 9, w: 44, h: 79 },

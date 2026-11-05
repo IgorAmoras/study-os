@@ -5,3 +5,120 @@
 .toast{position:fixed;bottom:25px;right:25px;z-index:50;background:#1c3247;color:#d9f2ff;border:1px solid #567994;padding:11px 17px;border-radius:8px;box-shadow:0 10px 35px #0009;opacity:0;pointer-events:none;transform:translateY(9px);transition:.25s;max-width:400px;font-size:12px}.toast.show{opacity:1;transform:none}.modal-layer{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:#020611d9;backdrop-filter:blur(7px)}.modal-layer.hidden{display:none}.modal{background:#101d2e;border:1px solid #405572;border-radius:15px;padding:30px;width:min(420px,90vw);box-shadow:0 30px 100px #000a}.modal h2{margin:13px 0 8px;font-size:22px;font-weight:500}.modal p{font-size:12px;color:#92a6bd;line-height:1.6}.modal input{width:100%;background:#0a1524;border:1px solid #38526b;border-radius:8px;padding:12px;color:white;margin:14px 0}.focus-choice{display:block;width:100%;padding:13px;margin-top:9px;text-align:left;background:#17283b;border:1px solid #344e66;border-radius:9px}.focus-choice:hover{border-color:#74b9df;background:#1c344b}.focus-choice strong{display:block;font-size:12px}.focus-choice span{display:block;color:#9eb5c9;font-size:10px;margin-top:5px}.modal-cancel{margin-top:15px;width:100%}
 @media(max-width:1100px){:root{--nav:207px}.view{padding-left:25px;padding-right:25px}.topbar{padding:0 25px}.hero h2{font-size:27px}.section-meta{display:none}.universe-detail{width:220px}.project-art{width:120px}.panel{min-width:180px}}@media(max-width:770px){:root{--nav:60px;--top:51px}.sidebar .brand{padding:12px 7px 25px;justify-content:center}.brand-mark{font-size:32px}.brand>span:last-child,.sidebar-label,.nav-item{font-size:0}.nav-item{justify-content:center;padding:0}.nav-item .nav-icon{font-size:24px}.nav-item .nav-key,.project-nav>span:not(.project-symbol),.sidebar-bottom,.sidebar-rule{display:none}.project-nav{padding:7px;justify-content:center}.nav{padding:0 7px}.topbar{padding:0 15px}.topbar-project,.topbar-divider{display:none}.view{padding-left:13px;padding-right:13px}.home-title-row h1{font-size:29px}.home-head-actions{display:none}.hero{height:330px}.hero-copy{margin:30px 20px}.hero h2{font-size:25px}.hero-index{display:none}.home-grid{grid-template-columns:1fr}.project-surface{flex-wrap:wrap}.project-art{width:100px}.project-end{display:none}.project-info{padding:19px 12px}.project-info h4{font-size:15px}.universe-detail{right:8px;top:8px;width:170px;padding:13px}.universe-detail .detail-emblem{height:40px;font-size:35px}.universe-detail h2{font-size:15px}.universe-detail p{font-size:10px;min-height:0}.universe-detail .detail-metadata{display:none}.universe-detail .detail-rule{margin:8px}.universe-detail .btn{font-size:9px;white-space:normal}.universe-toolbar h1,.workspace-head h1{font-size:18px}.universe-toolbar p,.workspace-head p{display:none}.workspace-actions .btn:not(:last-child){display:none}.workspace-head{align-items:start}.checkpoint-bar span:last-child{display:none}.notebook-head h1{font-size:18px}.notebook-head p{display:none}.notebook-status{font-size:9px}.notebook-view{padding-top:10px}.ink-tool span{display:none}.ink-tools{gap:3px}.ink-tool{padding:0 9px}.cosmos-chrome.bottom-left{display:none}}
 @media(max-width:530px){.home-head{padding:5px}.hero{margin-top:18px;height:300px}.hero-copy{margin:23px 15px}.hero h2{font-size:24px}.hero p{font-size:10px}.hero-buttons{flex-wrap:wrap}.btn{font-size:10px;padding:10px 12px}.focus-surface,.resume-surface{padding:18px}.universe-actions .btn{display:none}.project-info{flex-basis:55%}.project-info .overline{font-size:7px}.project-tags{flex-wrap:wrap}.topbar-avatar{display:none}.notebook-head{gap:5px}.notebook-status{align-self:start}}
+
+/* Sprint 02 — Cosmic Laboratory / spatial interaction and cinematic depth */
+:root { --blue:#a1e1ff; --gold:#f6d79a; --nav:242px; --top:66px; }
+.app {background:radial-gradient(ellipse at 50% -30%,rgba(56,74,145,.12),transparent 55%), #040914;}
+.sidebar {background:linear-gradient(180deg,#070d19 0%,#050a15 100%);border-right-color:rgba(114,162,219,.15);box-shadow:12px 0 55px rgba(0,0,0,.14);}
+.brand-mark {filter:drop-shadow(0 0 14px rgba(84,206,252,.72));animation:mark-breathe 8s ease-in-out infinite;}
+.brand strong {font-size:17px;letter-spacing:.22em}
+.brand small {letter-spacing:.23em}
+.sidebar-label {letter-spacing:.24em}
+.nav-item {border-radius:10px;transition:background .2s,border-color .2s,transform .2s}
+.nav-item.active {background:linear-gradient(100deg,rgba(62,120,175,.22),rgba(44,68,117,.09));box-shadow:inset 2px 0 #9de5ff,0 0 35px rgba(66,132,197,.06);border-color:rgba(95,178,238,.3)}
+.nav-item:hover {transform:translateX(2px)}
+.topbar {background:rgba(5,11,23,.85);backdrop-filter:blur(18px);border-bottom-color:rgba(99,145,198,.15)}
+.overline {color:#93adcb;letter-spacing:.21em}
+.home-view {padding-top:33px}
+.home-head {position:relative}
+.home-title-row h1 {letter-spacing:-.055em;font-size:40px}
+.home-title-row h1 em {font-family:Georgia,serif;color:#f1d19b}
+.hero {height:365px;border-radius:18px;border:1px solid rgba(130,191,255,.32);background:#030917;box-shadow:0 32px 96px rgba(0,0,0,.35),inset 0 0 0 1px rgba(107,155,236,.08);position:relative;overflow:hidden}
+.hero:before {content:"";pointer-events:none;position:absolute;inset:0;background:linear-gradient(115deg,rgba(61,105,177,.1),transparent 42%),linear-gradient(180deg,rgba(214,231,255,.02),transparent 32%);z-index:0}
+.hero:after {content:"";pointer-events:none;position:absolute;inset:10px;border:1px solid rgba(139,204,255,.08);border-radius:12px;z-index:0}
+.hero canvas, .hero .space-canvas {z-index:0!important}
+.hero-vignette {z-index:1;pointer-events:none;background:linear-gradient(90deg,#050d20 0%,rgba(5,13,32,.98) 17%,rgba(5,13,32,.86) 31%,rgba(5,13,32,.2) 55%,rgba(5,13,32,0) 90%),linear-gradient(0deg,rgba(5,13,32,.48),transparent 50%)}
+.hero-copy {z-index:3;position:relative;max-width:580px;margin:75px 0 0 45px}
+.hero h2 {font-weight:490;letter-spacing:-.053em;font-size:44px;line-height:1.05;margin:22px 0 17px;text-shadow:0 3px 24px #050d1b}
+.hero h2 i {font-family:Georgia,serif;font-style:italic;color:#92dfff;font-weight:400}
+.hero p {line-height:1.78;font-size:12px;color:#b1c8db}
+.hero .eyebrow {color:#deba79;letter-spacing:.22em}
+.hero .btn-primary {box-shadow:0 8px 25px rgba(88,190,255,.22)}
+.hero-buttons {margin-top:25px}
+.hero-topline {position:absolute;top:26px;left:44px;right:34px;z-index:3;display:flex;align-items:center;gap:9px;letter-spacing:.16em;font:600 9px Consolas,monospace;color:#9cbedc;pointer-events:none}
+.micro-flare {height:7px;width:7px;display:inline-block;border:1px solid #ffdb9a;background:#eabf7e;transform:rotate(45deg);box-shadow:0 0 18px #ffc76a}
+.hero-signal {margin-left:auto;color:#8ecfe7;font-size:9px;letter-spacing:.13em}
+.hero-spectra {position:absolute;top:67px;right:34px;z-index:3;display:flex;flex-direction:column;align-items:flex-end;gap:3px;pointer-events:none;color:#a1bcd8;font:10px Consolas,monospace;letter-spacing:.15em}
+.hero-spectra strong {font-family:Inter,"Segoe UI",sans-serif;color:rgba(217,241,255,.85);font-size:39px;font-weight:300;line-height:1.1;letter-spacing:-.09em}
+.hero-spectra small {font-size:8px;color:#7298b6}
+.hero-index {z-index:3;bottom:19px;right:29px}
+.hero-bottom-rail {position:absolute;left:43px;bottom:21px;z-index:3;pointer-events:none;color:rgba(119,169,211,.74);font:9px Consolas,monospace;letter-spacing:.09em}
+.hero-bottom-rail span {color:#d3ae73;padding:0 9px}
+.section-head {margin-top:32px}
+.surface {background:linear-gradient(160deg,rgba(21,35,58,.91),rgba(9,19,35,.93));border-color:rgba(103,152,213,.18);box-shadow:0 10px 35px rgba(0,0,0,.12);transition:border-color .25s,transform .25s,box-shadow .25s}
+.surface:hover {border-color:rgba(123,196,239,.32);box-shadow:0 15px 45px rgba(0,0,0,.20)}
+.focus-surface {background:radial-gradient(ellipse at 95% 5%,rgba(177,134,74,.065),transparent 45%),linear-gradient(160deg,#121f35,#0d192d)}
+.resume-surface {background:radial-gradient(ellipse at 98% 4%,rgba(84,163,228,.09),transparent 48%),linear-gradient(160deg,#101f34,#0d192a)}
+.project-art {width:178px;background:radial-gradient(circle at 53% 50%,rgba(46,106,166,.55),#091a2c 63%)}
+.project-core {color:#ccefff;filter:drop-shadow(0 0 23px #7ccffe);animation:mark-breathe 6s ease-in-out infinite}
+.project-orbit {border-color:rgba(135,217,255,.54)}
+.universe-view {padding:25px 28px 26px}
+.universe-toolbar h1 {font-size:30px;font-weight:470;letter-spacing:-.048em}
+.universe-toolbar p {color:#91aec9}
+.universe-stage {border-radius:15px;border-color:rgba(126,194,250,.24);box-shadow:0 25px 85px rgba(0,0,0,.28),inset 0 0 0 1px rgba(120,190,250,.045)}
+.universe-stage:before {content:"";position:absolute;inset:11px;border:1px solid rgba(98,171,225,.075);border-radius:10px;pointer-events:none;z-index:1}
+.universe-stage:after {content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,12,24,.17),transparent 24%,transparent 67%,rgba(5,12,24,.10));pointer-events:none;z-index:1}
+.cosmos-chrome {z-index:2}
+.top-left {left:26px;top:21px;color:#9bdaf7}
+.bottom-left {bottom:22px;left:24px;letter-spacing:.07em}
+.bottom-right {right:25px;bottom:22px}
+.atlas-hud {position:absolute;z-index:2;left:27px;top:59px;pointer-events:none;width:217px;padding:15px 15px 14px;background:linear-gradient(120deg,rgba(9,29,56,.66),rgba(5,15,32,.25));border:1px solid rgba(98,163,225,.16);border-radius:10px;box-shadow:0 8px 45px #0002;backdrop-filter:blur(3px)}
+.atlas-head {font:9px Consolas,monospace;color:#90b7db;letter-spacing:.05em}
+.atlas-head i {display:inline-block;width:6px;height:6px;background:#80d8be;border-radius:50%;box-shadow:0 0 9px #a1ffe5;margin-right:5px}
+.atlas-metrics {display:flex;align-items:baseline;gap:9px;margin-top:9px;color:#94adc9;font:8px Consolas,monospace}
+.atlas-metrics strong {font:300 25px "Segoe UI",sans-serif;color:#edf6ff}
+.atlas-coordinate {margin-top:12px;padding-top:10px;border-top:1px solid rgba(116,164,222,.20);font:8px/1.7 Consolas,monospace;letter-spacing:.035em;color:#759db9}
+.atlas-coordinate b {color:#ecc98d}
+.universe-detail {width:277px;right:22px;top:22px;z-index:3;background:linear-gradient(155deg,rgba(17,35,62,.86),rgba(5,15,31,.87));border-color:rgba(126,190,241,.36);box-shadow:0 25px 60px #0009,inset 0 1px rgba(203,232,255,.09);backdrop-filter:blur(26px);padding:23px 22px;border-radius:14px}
+.detail-emblem {height:77px;color:#b8e7fc;font-size:60px}
+.universe-detail h2 {font-size:23px;letter-spacing:-.035em}
+.universe-detail p {font-size:12px;line-height:1.8}
+.universe-detail .detail-button {margin-top:22px}
+.workspace-view {padding:25px 28px 19px}
+.workspace-surface {background:radial-gradient(ellipse at 50% 44%,rgba(30,75,126,.28),transparent 58%),#071321;border:1px solid rgba(109,161,220,.29);box-shadow:inset 0 0 100px rgba(22,69,111,.08)}
+.workspace-grid {background-image:linear-gradient(rgba(85,144,194,.082) 1px,transparent 1px),linear-gradient(90deg,rgba(85,144,194,.082) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom,#000,rgba(0,0,0,.58));}
+.workspace-ambient {position:absolute;left:36%;top:18%;width:28%;height:62%;pointer-events:none;opacity:.16;filter:drop-shadow(0 0 35px #8de3ff);}
+.workspace-orbit {height:100%;width:100%;border:1px solid #8cd9ff;border-radius:50%;transform:rotateX(65deg) rotate(24deg);box-shadow:0 0 28px #54c3fb,inset 0 0 42px #4fb5fe4d}
+.workspace-axis {position:absolute;background:#73cbefb3}
+.workspace-axis.horizontal {top:50%;width:100%;height:1px}
+.workspace-axis.vertical {left:50%;height:100%;width:1px}
+.workspace-ruler {position:absolute;right:16px;top:18px;color:rgba(114,164,207,.42);font:9px Consolas,monospace;letter-spacing:.06em}
+.workspace-ruler span {padding:0 8px;color:#b8d1ec}
+.workspace-guide {color:#729ab8}
+.panel {border:1px solid rgba(132,189,233,.38);border-radius:12px;background:linear-gradient(155deg,rgba(11,24,43,.97),rgba(6,16,31,.97));box-shadow:0 35px 75px rgba(0,0,0,.46),0 0 0 1px rgba(152,202,243,.025),inset 0 1px rgba(205,233,255,.07);backdrop-filter:blur(22px)}
+.panel-head {padding:12px 14px;background:linear-gradient(90deg,rgba(35,67,106,.82),rgba(16,34,58,.76));border-bottom-color:rgba(118,174,222,.3)}
+.panel-icon {color:#a8e6ff}
+.panel-body {padding:16px}
+.panel-footer {border-top-color:rgba(116,171,224,.18)}
+.notebook-area {box-shadow:inset 0 0 80px rgba(27,80,130,.11)}
+.ink-tools {box-shadow:0 9px 28px rgba(0,0,0,.17)}
+@keyframes mark-breathe {0%,100%{filter:drop-shadow(0 0 10px rgba(88,200,255,.65));}50%{filter:drop-shadow(0 0 23px rgba(135,225,255,.96));}}
+@media(max-width:850px){.hero h2{font-size:35px}.hero-copy{margin-left:25px;margin-top:84px}.hero-topline{left:25px}.hero-spectra{display:none}.hero-bottom-rail{display:none}.atlas-hud{display:none}.universe-detail{width:220px;padding:17px}.hero{height:330px}}
+@media(prefers-reduced-motion:reduce){.brand-mark,.project-core{animation:none}.nav-item,.surface{transition:none}}
+
+/* Source portals: editorial line numbers and scientific syntax, without editing canonical files. */
+.panel-body:has(.source-editor) {padding:0;}
+.panel-body:has(.source-editor) .panel-source {margin:0;padding:14px 16px;border-bottom:1px solid rgba(121,179,228,.16);background:rgba(11,23,40,.75)}
+.source-editor {background:linear-gradient(160deg,rgba(4,14,30,.68),rgba(6,14,26,.86));min-height:100%;font-family:Consolas,"JetBrains Mono",monospace}
+.source-editor-caption {display:flex;justify-content:space-between;padding:11px 16px;color:#7f9fbb;font-size:9px;letter-spacing:.12em;border-bottom:1px solid rgba(113,164,216,.16)}
+.source-editor-caption span {color:#6d849b}
+.source-lines {padding:13px 0 28px;font-size:11.5px;line-height:1.72;overflow:auto;min-height:0}
+.source-line {display:flex;white-space:pre;min-width:max-content;color:#bbd8e9}
+.source-line:hover {background:rgba(127,195,255,.055)}
+.source-line-no {display:inline-block;flex:none;text-align:right;width:43px;padding-right:13px;margin-right:18px;color:#55708d;border-right:1px solid rgba(115,162,213,.16);user-select:none}
+.source-line-code {padding-right:20px}
+.code-comment {color:#5d97a1}
+.code-keyword {color:#9b9cfa}
+.code-string {color:#e8c58c}
+.code-number {color:#f4bf89}
+
+/* Tablet specialization: the S Pen receives the whole workspace, not desktop navigation. */
+@media (max-width:770px){
+  :root{--nav:0px;--top:50px}
+  .sidebar{display:none}
+  .app-main{width:100%;margin-left:0}
+  .topbar{padding:0 16px}
+  .notebook-view{padding:14px 12px}
+  .notebook-head h1{font-size:23px}
+  .notebook-head p{display:none}
+}

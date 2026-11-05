@@ -17,7 +17,7 @@ const FILES={
   control:'research_memorandum.ipynb',
 };
 const current={view:'home',state:null,project:null,notebook:null,cosmos:null,hero:null,z:5};
-const defaultCamera={yaw:-.42,pitch:.16,distance:18,target:[5,0,0]};
+const defaultCamera={yaw:-.42,pitch:.16,distance:25,target:[5,0,0]};
 const token=()=>sessionStorage.getItem('studyos-token')||'';
 function flash(message){const t=$('#toast');t.textContent=message;t.classList.add('show');clearTimeout(flash.timer);flash.timer=setTimeout(()=>t.classList.remove('show'),3200);}
 function setConnection(label,online){$('#connection-label').textContent=label;$('#health-dot').className='health-dot '+(online?'online':'offline');}
@@ -53,11 +53,30 @@ function panelTitle(path){return path.split('/').at(-1);}
 function openFilePanel(path,kind){let panels=current.state.workspace.panels;let match=panels.find(p=>p.path===path);if(!match){const index=panels.length;const panel={id:'panel-'+crypto.randomUUID().slice(0,8),kind:kind|| (path.endsWith('.md')?'notes':'code'),title:panelTitle(path),path,x:clamp(8+((index*9)%50),1,70),y:clamp(9+((index*6)%35),1,65),w:48,h:65};panels.push(panel);saveWorkspace();}else{panels=panels.filter(p=>p.id!==match.id);panels.push(match);current.state.workspace.panels=panels;saveWorkspace();}renderPanels();}
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function setupWorkspace(){const defaultCode=FILES.duffing,defaultNotes='meeting_notes/2026-10-19_reuniao_luciano.md';$('#add-code').onclick=()=>{openFilePanel(defaultCode,'code');flash('Painel de código projetado');};$('#add-notes').onclick=()=>{openFilePanel(defaultNotes,'notes');flash('Notas do repositório projetadas');};$('#add-notebook').onclick=()=>setView('notebook');$('#checkpoint-input').value=current.state.checkpoint.text||'';$('#checkpoint-save').onclick=async()=>{const note=$('#checkpoint-input').value.trim();if(await patch({checkpoint:{text:note,updatedAt:new Date().toISOString()}})){$('#checkpoint-saved').textContent='CHECKPOINT SALVO';flash('Checkpoint guardado na máquina');}};}
+function formatSource(source, extension){
+  const keywords=new Set(['def','return','for','in','if','else','elif','try','except','with','as','from','import','class','and','or','not','None','True','False','lambda','while','yield','continue','break','pass']);
+  const py=extension==='py';
+  const lines=source.split('\n');
+  const renderLine=lines.map((line,i)=>{
+    const tokens=py?line.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][\w]*\b|./g)||[]:[line];
+    const decorated=tokens.map(t=>{
+      const safe=esc(t);
+      if(py&&t.startsWith('#'))return `<span class="code-comment">${safe}</span>`;
+      if(py&&/^['"]/.test(t))return `<span class="code-string">${safe}</span>`;
+      if(py&&keywords.has(t))return `<span class="code-keyword">${safe}</span>`;
+      if(py&&/^\d/.test(t))return `<span class="code-number">${safe}</span>`;
+      return safe;
+    }).join('');
+    return `<div class="source-line"><span class="source-line-no">${i+1}</span><span class="source-line-code">${decorated||' '}</span></div>`;
+  }).join('');
+  return `<div class="source-editor"><div class="source-editor-caption">${py?'PYTHON / READ ONLY':'RESEARCH SOURCE / READ ONLY'} <span>${lines.length} LINES</span></div><div class="source-lines">${renderLine}</div></div>`;
+}
+
 async function loadPanelContent(panel){const container=document.querySelector(`[data-panel-id="${panel.id}"] .panel-body`);if(!container)return;const gh=repoFile(panel.path),ext=panel.path.split('.').at(-1);const header=`<div class="panel-source">FONTE: <a href="${esc(gh)}" target="_blank" rel="noopener noreferrer">${esc(panel.path)} ↗</a></div>`;
   if(!current.project.connected){container.innerHTML=header+`<div class="panel-placeholder"><p><strong>Arquivo preservado no Git.</strong></p><p>Para ler o conteúdo aqui, configure <code>STUDYOS_RESEARCH_DIR</code> com a pasta local do repositório e reinicie o servidor.</p><p>O link acima abre o arquivo original no GitHub.</p></div>`;return;}
   try{const resp=await api('/api/project/file?path='+encodeURIComponent(panel.path));if(['png','jpg','jpeg','webp','svg'].includes(ext)){container.innerHTML=header+`<img alt="Figura do repositório" style="max-width:100%" src="/api/project/file?path=${encodeURIComponent(panel.path)}${token()?'&token='+encodeURIComponent(token()):''}"/>`;return;}
     let content=await resp.text();if(ext==='ipynb'){const book=JSON.parse(content);content=(book.cells||[]).map(c=>(c.cell_type==='markdown'?'# Markdown\n':'# Código\n')+(Array.isArray(c.source)?c.source.join(''):c.source)).join('\n\n···\n\n');}
-    container.innerHTML=header+`<pre>${esc(content.slice(0,170000))}</pre>`;
+    container.innerHTML=header+formatSource(content.slice(0,170000),ext);
   }catch(e){container.innerHTML=header+`<p>Não foi possível ler o arquivo local: ${esc(e.message)}</p>`;}}
 function renderPanels(){const holder=$('#panels');if(!current.state||current.view!=='workspace')return;const old=holder.querySelectorAll('.panel');old.forEach(p=>p.remove());
   for(const [i,p] of current.state.workspace.panels.entries()){const el=document.createElement('div');el.className='panel';el.dataset.panelId=p.id;Object.assign(el.style,{left:p.x+'%',top:p.y+'%',width:p.w+'%',height:p.h+'%',zIndex:i+1});el.innerHTML=`<div class="panel-head"><span class="panel-icon">${p.kind==='code'?'⌘':'▤'}</span><span class="panel-name">${esc(p.title)}</span><button class="panel-close" title="Fechar projeção">×</button></div><div class="panel-body"><p>Carregando referência...</p></div><div class="panel-footer"><span>FONTE CANÔNICA · GIT</span></div>`;

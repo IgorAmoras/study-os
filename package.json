@@ -1,7 +1,7 @@
 {
   "name": "study-os",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "Study OS · spatial research studio · first integrated vertical slice",
   "engines": {"node": ">=20.19"},

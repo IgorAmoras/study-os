@@ -1,8 +1,14 @@
 # Study OS · Cosmic Laboratory
 
-**Primeiro incremento executável** do Study OS, conforme as 37 rodadas de discovery de 04/11/2026.
+**Primeiro fluxo vertical executável** do Study OS, conforme as 37 rodadas de discovery de 04/11/2026.
 
 > Objetivo: estudar e pesquisar num ambiente espacial local-first, com universo 3D, bancada, arquivos científicos reais, leitura de PDF e Super Caderno Vivo entre PC e tablet. **Sem IA nesta release.**
+
+## Sprint 02 · Cinematic Cosmic Laboratory (05/11/2026)
+
+Iteração visual sobre o mesmo núcleo local-first: Home orbital com atlas de pesquisa; **constelações em profundidade** e cristais facetados para os nós científicos; anéis orbitais, brilhos volumétricos, ligações curvas e sinais animados; perspectiva navegável por arraste e zoom; bancada com painéis científicos e preview de código com linhas numeradas e realce de sintaxe; no tablet, o Super Caderno ocupa a tela sem sidebar de desktop. O mesmo conjunto de coordenadas permanece no fallback canvas e no renderer React Three Fiber.
+
+**Atenção às capturas:** screenshots de verificação usam o código real da interface `legacy/` renderizado no Chromium por `page.set_content`, contornando restrições de navegação do ambiente de testes. Os dados do estado inicial e chamadas de API foram simulados e a bancada recebeu trechos de arquivos científicos reais como fixtures. Não são provas de que a versão WebGL/React compilou, nem testes físicos da S Pen. A integração React, o desempenho GPU e a sincronização PC↔tablet precisam de validação no computador do usuário.
 
 ## Iniciar no Windows (PowerShell)
 
@@ -69,7 +75,7 @@ npm run build        # Build de produção React/Three.js/PDF.js
 npm run typecheck    # Verificação TypeScript da ilha WebGL
 ```
 
-> Limitação de validação do ambiente de geração em 04/11/2026: **os testes Node de backend passaram**, mas o ambiente não tinha acesso DNS ao npm, portanto não foi possível baixar as dependências e executar `npm run build`/`npm run typecheck` da nova interface aqui. Execute esses comandos no seu computador antes de confiar no frontend. O bundle `dist/` não está incluído; será produzido pelo Vite depois de `npm install`. Um frontend anterior, sem dependências, permanece em `legacy/` como fallback para testes locais de servidor, mas **a experiência WebGL/PDF.js atual fica no código `src/`**.
+> Limitação de validação do ambiente de geração em 05/11/2026: **os testes Node de backend passaram**, mas o ambiente não tinha acesso DNS ao npm, portanto não foi possível baixar as dependências e executar `npm run build`/`npm run typecheck` da nova interface aqui. Execute esses comandos no seu computador antes de confiar no frontend. O bundle `dist/` não está incluído; será produzido pelo Vite depois de `npm install`. Um frontend anterior, sem dependências, permanece em `legacy/` como fallback para testes locais de servidor, mas **a experiência WebGL/PDF.js atual fica no código `src/`**.
 
 ## Estrutura
 
