@@ -22,6 +22,9 @@ const BASE = {
   workspace: {
     selected: 'duffing',
     camera: { yaw: -0.42, pitch: 0.16, distance: 25, target: [5, 0, 0] },
+    activePanelId: 'code',
+    layout: {readerPct:34,contextOpen:true,preset:'balanced'},
+    captures: [],
     panels: [
       { id: 'code', kind: 'code', title: 'classic_koopman.py', path: 'systems/duffing_oscillator/classic_koopman.py', x: 2, y: 9, w: 50, h: 79 },
       { id: 'notes', kind: 'notes', title: 'Caderno de pesquisa', path: 'meeting_notes/2026-10-19_reuniao_luciano.md', x: 54, y: 9, w: 44, h: 79 },
@@ -66,7 +69,14 @@ export function createStore(file) {
     for (const key of Object.keys(patch)) if (!permitted.includes(key)) throw new Error(`Invalid field: ${key}`);
     if (patch.mode != null && !['explore','study','focus'].includes(patch.mode)) throw new Error('Invalid mode');
     if (patch.tasks != null && (!Array.isArray(patch.tasks) || patch.tasks.length > 100)) throw new Error('Invalid tasks');
-    if (patch.workspace != null && (!patch.workspace || !Array.isArray(patch.workspace.panels) || patch.workspace.panels.length > 30)) throw new Error('Invalid workspace');
+    if (patch.workspace != null) {
+      const workspace=patch.workspace;
+      if (!workspace || !Array.isArray(workspace.panels) || workspace.panels.length > 30) throw new Error('Invalid workspace');
+      if (workspace.activePanelId != null && (typeof workspace.activePanelId !== 'string' || workspace.activePanelId.length > 120)) throw new Error('Invalid active panel');
+      if (workspace.captures != null && (!Array.isArray(workspace.captures) || workspace.captures.length > 60 ||
+        workspace.captures.some(c=>!c || typeof c.id !== 'string' || c.id.length > 80 || typeof c.text !== 'string' || c.text.length > 4500 || !['saved','inserted'].includes(c.status)))) throw new Error('Invalid capture tray');
+      if (workspace.layout != null && (!Number.isFinite(workspace.layout.readerPct) || workspace.layout.readerPct < 24 || workspace.layout.readerPct > 60 || typeof workspace.layout.contextOpen !== 'boolean')) throw new Error('Invalid desk layout');
+    }
     state = { ...state, ...structuredClone(patch), updatedAt: new Date().toISOString() };
     await persist();
     return getState();

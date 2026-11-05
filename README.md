@@ -4,6 +4,14 @@
 
 > Objetivo: estudar e pesquisar num ambiente espacial local-first, com universo 3D, bancada, arquivos científicos reais, leitura de PDF e Super Caderno Vivo entre PC e tablet. **Sem IA nesta release.**
 
+## Sprint 03 · Bancada integrada (05/11/2026) — v0.4.0
+
+A bancada passou de janelas soltas para um ambiente coeso **Referências ↔ Super Caderno ↔ Contexto**, com abas de documento, presets equilibrado/leitura/escrita, divisória ajustável e contexto recolhível. O caderno visível na bancada é **a mesma instância de canvas** usada no modo expandido; os traços não são duplicados e a conexão WebSocket não é reiniciada ao mudar de vista.
+
+No frontend Vite, PDFs importados abrem por PDF.js com camada de texto selecionável sobre a página. Selecionar e clicar em **Caderno** insere um cartão vetorial com referência ao arquivo, página e região do texto; **Guardar** adiciona à bandeja persistente para inserção posterior. Nenhuma das duas ações força mudança de tela. Também é possível selecionar código/Markdown do repositório e enviá-lo ao caderno, ou focar o canvas e colar texto via Ctrl+V. A sessão mantém aba ativa, página do PDF, fragmentos guardados e largura do leitor no JSON local. A visualização do tablet continua especializada em tinta e tem viewport independente.
+
+**Verificações realizadas:** 13/13 testes Node, incluindo estado da bancada e idempotência de fragmentos; teste de interação do fallback no Chromium com seleção de código → bandeja → caderno sem navegar, presets e manuscrito, sem erros JavaScript. As screenshots usam `legacy/` com estado/API simulados e trechos reais de arquivos científicos como fixtures. **Não foram validados** o build React/Vite + PDF.js (registro npm inacessível neste ambiente) nem hardware real do Tab S6 FE. No fallback sem dependências, PDFs usam o visualizador embutido do navegador; a seleção PDF com proveniência fica no frontend Vite.
+
 ## Sprint 02 · Cinematic Cosmic Laboratory (05/11/2026)
 
 Iteração visual sobre o mesmo núcleo local-first: Home orbital com atlas de pesquisa; **constelações em profundidade** e cristais facetados para os nós científicos; anéis orbitais, brilhos volumétricos, ligações curvas e sinais animados; perspectiva navegável por arraste e zoom; bancada com painéis científicos e preview de código com linhas numeradas e realce de sintaxe; no tablet, o Super Caderno ocupa a tela sem sidebar de desktop. O mesmo conjunto de coordenadas permanece no fallback canvas e no renderer React Three Fiber.
@@ -59,18 +67,18 @@ No modo tablet a interface abre **somente o Super Caderno**, sem iniciar WebGL/T
 |---|---|
 | Central | Foco do dia, checkpoints e retomada da bancada |
 | Universo | Objetos científicos WebGL com coordenadas 3D estáveis, constelações, zoom/órbita e seleção de destinos |
-| Bancada | Painéis movíveis e redimensionáveis; arquivos reais de código, Markdown e notebooks `.ipynb` em leitura |
-| PDF | Importar PDF do próprio computador, salvar fora do Git, renderizar páginas por PDF.js, extrair texto selecionável com origem (documento/página) |
-| Caderno | Canvas de coordenadas infinitas, traços vetoriais com pressão quando disponível, S Pen, texto, zoom, pan e cor |
+| Bancada | Leitor com abas e largura ajustável ao lado do Super Caderno; captura de código e bandeja de fragmentos, três presets de layout |
+| PDF | Importar PDF, ler e selecionar sobre a página por PDF.js (Vite), capturar texto com documento/página/região e voltar à fonte |
+| Caderno | Canvas compartilhado entre bancada e modo expandido; tinta vetorial, pressão quando disponível, texto, Ctrl+V, zoom, pan e cor |
 | Sincronização | WebSocket PC↔tablet; IndexedDB para pendências offline, IDs idempotentes, salvamento atômico no servidor |
 | Dados | JSON e arquivos locais; nenhuma API paga, serviço de IA ou SQLite obrigatório |
 
-Para capturar um texto de PDF: na **Bancada**, clique **+ PDF**, abra o documento importado, selecione um trecho do texto extraído, e escolha **Enviar texto ao caderno**. Sem seleção ativa, a ação usa o texto extraível da página, até 4.000 caracteres. O texto é inserido na área de trabalho do caderno com nome do arquivo e número da página; OCR e recorte de figuras serão posteriores.
+Para capturar texto de PDF no **frontend Vite**: na bancada clique **Importar PDF**, selecione texto diretamente sobre a página, então escolha **Caderno** (insere no mesmo espaço, mantendo o leitor aberto) ou **Guardar** (bandeja à direita). A ação exige seleção explícita: não captura uma página inteira por acidente. Na bandeja, **Fonte** reabre o mesmo PDF na página correspondente. É possível selecionar trechos de código e fazer o mesmo, inclusive sem rede/IA.
 
 ## Verificação
 
 ```powershell
-npm test             # Testes automatizados do servidor/API/arquivos/WS
+npm test             # 13 testes automatizados: servidor/API/WS e estado da bancada
 npm run build        # Build de produção React/Three.js/PDF.js
 npm run typecheck    # Verificação TypeScript da ilha WebGL
 ```
@@ -88,6 +96,7 @@ study-os/
 │   ├── nodes.js               # Nós científicos/posições estáveis
 │   ├── pdf.js                 # PDF.js: páginas, texto e captura
 │   ├── notebook.js            # Canvas de tinta local-first, IndexedDB e WS
+│   ├── workspace-model.js     # Layout, abas ativas e captura persistente
 │   └── styles.css             # Cosmic Laboratory
 ├── server/
 │   ├── index.mjs              # Node HTTP + validação de caminhos/PDF
@@ -95,14 +104,14 @@ study-os/
 │   └── websocket.mjs          # Canal de tinta e replicação
 ├── tests/                     # Testes Node sem dependências externas
 ├── public/                    # Favicon copiado pelo Vite
-├── legacy/                    # Interface anterior sem dependências (fallback)
+├── legacy/                    # Fallback sem dependências, UI da bancada também atualizada
 ├── docs/discovery/            # Registro integral consolidado
 └── scripts/dev.mjs            # Inicialização conjunta Node + Vite
 ```
 
 ## Não está implementado ainda
 
-Não tratar esta fatia como produto completo das 37 rodadas. Faltam extração gráfica/figuras PDF, OCR, edição nativa de código, execução Jupyter integrada, grupos/seleção por laço/undo-redo completos do caderno, zoom semântico refinado, múltiplos projetos editáveis, histórico avançado de experimentos, segurança de acesso remoto, e testes reais de latência de S Pen no Tab S6 FE. O frontend WebGL ainda depende da verificação de build e do teste em hardware real.
+Não tratar esta fatia como produto completo das 37 rodadas. Faltam recortes gráficos/figuras PDF (além de texto selecionável), OCR, edição nativa de código, execução Jupyter integrada, grupos/seleção por laço/undo-redo completos do caderno, zoom semântico refinado, múltiplos projetos editáveis, histórico avançado de experimentos, segurança de acesso remoto, e testes reais de latência de S Pen no Tab S6 FE. O frontend WebGL ainda depende da verificação de build e do teste em hardware real.
 
 ## Decisões preservadas
 
