@@ -4,6 +4,29 @@
 
 > Objetivo: estudar e pesquisar num ambiente espacial local-first, com universo 3D, bancada, arquivos científicos reais, leitura de PDF e Super Caderno Vivo entre PC e tablet. **Sem IA nesta release.**
 
+## Instalação assistida no Windows (06/11/2026)
+
+Clone o repositório e execute a rotina de preparação, que verifica Node/Git,
+clona a pesquisa científica em pasta separada caso necessário, instala dependências
+e executa testes, typecheck e build:
+
+```powershell
+cd $HOME
+git clone https://github.com/IgorAmoras/study-os.git StudyOS
+cd .\StudyOS
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1
+```
+
+Depois da primeira instalação, abra `Start-StudyOS.cmd` por duplo clique.
+O app inicia somente em `http://127.0.0.1:4317` e os dados locais ficam em
+`.studyos-data/` (ignorada pelo Git). Para usar uma cópia já existente da
+pesquisa, passe `-ResearchPath "C:\\caminho\\para\\data-driven-dynamics-and-control"`
+ao script de setup. O instalador ainda precisa ser validado num Windows real;
+em caso de falha, examine a saída do PowerShell antes de tentar novamente.
+
+O DeepTutor está documentado como [integração futura e opcional](docs/integrations/deeptutor.md),
+sem alterar o requisito de **zero IA na primeira release**.
+
 ## Sprint 03 · Bancada integrada (05/11/2026) — v0.4.0
 
 A bancada passou de janelas soltas para um ambiente coeso **Referências ↔ Super Caderno ↔ Contexto**, com abas de documento, presets equilibrado/leitura/escrita, divisória ajustável e contexto recolhível. O caderno visível na bancada é **a mesma instância de canvas** usada no modo expandido; os traços não são duplicados e a conexão WebSocket não é reiniciada ao mudar de vista.
